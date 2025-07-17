@@ -12,6 +12,12 @@ use App\Models\Company;
 use App\Models\Client;
 use App\Models\Livreur;
 use App\Models\List_origins;
+use App\Models\CaisseVide;
+use App\Models\marchandise_entree;
+use App\Models\marchandise_sortie;
+use App\Models\CaisseRetour;
+
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\DisplayByCompany;
 class CompanyController extends Controller
@@ -33,7 +39,7 @@ class CompanyController extends Controller
                         // زر التعديل (تحقق من الصلاحية)
                         /* if ($user && $user->can('company-modifier')) { */
                             $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCompany"
-                                        data-id="' . $row->id . '"  
+                                        data-id="' . $row->id . '"
                                         title="Modifier company" data-bs-toggle="modal" data-bs-target="#ModalEditCompany">
                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                     </a>';
@@ -42,7 +48,7 @@ class CompanyController extends Controller
                         // زر الحذف (تحقق من الصلاحية)
                         /* if ($user && $user->can('company-supprimer')) { */
                            /*  $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCompany"
-                                        data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                        data-id="' . $row->id . '" data-bs-toggle="tooltip"
                                         title="Supprimer company">
                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                     </a>'; */
@@ -53,16 +59,16 @@ class CompanyController extends Controller
                     ->rawColumns(['action']) // تجنب ترميز HTML
                     ->make(true);
 
-            
+
         }
-        
+
         $Clients = Client::all();
         $Livreurs = Livreur::all();
         $Products = List_origins::all();
         $CompanyIsActive = Company::where('status',1)->value('name');
         $ListCompany = Company::all();
-        
-                                        
+
+
 
         return view('company.index')
         ->with('company',$CompanyIsActive)
@@ -92,13 +98,13 @@ class CompanyController extends Controller
         }
         else
         {
-            
+
             $data = $request->all();
             $data = array_map('trim', $data);
             $data['name']          = ucfirst(strtolower($request->name));
             $data['iduser']        = Auth::user()->id;
             $checkHasCompany   = Company::count();
-            if($checkHasCompany == 0 ) 
+            if($checkHasCompany == 0 )
             {
                 $data['status'] = 1;
             }
@@ -118,18 +124,18 @@ class CompanyController extends Controller
                     'message' => 'Compagnie créée avec succès',
                 ]);
             }
-            
+
         }
     }
 
 
     public function Update(Request $request)
     {
-        
+
         // Validate input
         $validator = Validator::make($request->all(), [
             'name'   => 'required',
-            'id'     => 'required|exists:companys,id', 
+            'id'     => 'required|exists:companys,id',
             'status' => 'required|in:0,1',
         ], [
             'required' => 'Le champ :attribute est requis.',
@@ -142,11 +148,11 @@ class CompanyController extends Controller
             ]);
         }
 
-       
+
         $data = $request->only(['name', 'id', 'status']);
         $data['name'] = ucfirst(strtolower(trim($data['name'])));
 
-        
+
         $company = DB::table('companys')->where('id', $data['id'])->first();
 
         if (!$company) {
@@ -157,7 +163,7 @@ class CompanyController extends Controller
         }
 
         if ($data['status'] == 1) {
-            
+
             DB::table('companys')->where('status', 1)->where('id', '!=', $data['id'])->update(['status' => 0]);
         } elseif ($data['status'] == 0 && $company->status == 1) {
             return response()->json([
@@ -180,8 +186,8 @@ class CompanyController extends Controller
 
     public function SaveClientByCompany(Request $request)
     {
-        
-        
+
+
 
         $request->validate([
             'idcompany' => 'required|integer',
@@ -192,10 +198,10 @@ class CompanyController extends Controller
             'role' => 'required|string'
         ]);
 
-        
+
         if (!empty($request->ajouter)) {
             foreach ($request->ajouter as $idpermission) {
-               
+
                 $existsSameRole = DB::table('display_with_company')
                     ->where('idcompany', $request->idcompany)
                     ->where('idpermission', $idpermission)
@@ -203,34 +209,71 @@ class CompanyController extends Controller
                     ->exists();
 
                 if (!$existsSameRole) {
-                   
+
                     DB::table('display_with_company')->insert([
                         'idcompany' => $request->idcompany,
                         'idpermission' => $idpermission,
                         'role' => $request->role,
                     ]);
+                    // update all column idclient in table action
+                    $CaisseVide = CaisseVide::where('idclient_tmp','=',$idpermission)->update([
+                        'idclient' => $idpermission,
+                    ]);
+
+
+                    $marchandise_entree = marchandise_entree::where('idclient_tmp','=',$idpermission)->update([
+                        'idclient' => $idpermission,
+                    ]);
+
+                    $marchandise_sortie = marchandise_sortie::where('idclient_tmp','=',$idpermission)->update([
+                        'idclient' => $idpermission,
+                    ]);
+
+                    $CaisseRetour = CaisseRetour::where('idclient_tmp','=',$idpermission)->update([
+                        'idclient' => $idpermission,
+                    ]);
+
+
                 }
-                
+
             }
         }
 
-        
+
         if (!empty($request->supprimer)) {
             DB::table('display_with_company')
                 ->where('idcompany', $request->idcompany)
                 ->whereIn('idpermission', $request->supprimer)
-                ->where('role', $request->role) 
+                ->where('role', $request->role)
                 ->delete();
+                // update all column idclient in table action
+                $CaisseVide = CaisseVide::where('idclient','=',$request->supprimer)->update([
+                    'idclient' => null,
+                ]);
+
+                $marchandise_entree = marchandise_entree::where('idclient','=',$request->supprimer)->update([
+                    'idclient' => null,
+                ]);
+
+                $marchandise_sortie = marchandise_sortie::where('idclient','=',$request->supprimer)->update([
+                    'idclient' => null,
+                ]);
+
+                $CaisseRetour = CaisseRetour::where('idclient','=',$request->supprimer)->update([
+                    'idclient' => null,
+                ]);
+
+
         }
 
         return response()->json(['success' => true]);
 
-        
+
     }
 
     public function SaveLivreurByCompany(Request $request)
     {
-        
+
         $request->validate([
             'idcompany' => 'required|integer',
             'ajouter' => 'nullable|array',
@@ -240,10 +283,10 @@ class CompanyController extends Controller
             'role' => 'required|string'
         ]);
 
-        
+
         if (!empty($request->ajouter)) {
             foreach ($request->ajouter as $idpermission) {
-               
+
                 $existsSameRole = DB::table('display_with_company')
                     ->where('idcompany', $request->idcompany)
                     ->where('idpermission', $idpermission)
@@ -251,23 +294,23 @@ class CompanyController extends Controller
                     ->exists();
 
                 if (!$existsSameRole) {
-                   
+
                     DB::table('display_with_company')->insert([
                         'idcompany' => $request->idcompany,
                         'idpermission' => $idpermission,
                         'role' => $request->role,
                     ]);
                 }
-                
+
             }
         }
 
-        
+
         if (!empty($request->supprimer)) {
             DB::table('display_with_company')
                 ->where('idcompany', $request->idcompany)
                 ->whereIn('idpermission', $request->supprimer)
-                ->where('role', $request->role) 
+                ->where('role', $request->role)
                 ->delete();
         }
 
@@ -285,10 +328,10 @@ class CompanyController extends Controller
             'role' => 'required|string'
         ]);
 
-        
+
         if (!empty($request->ajouter)) {
             foreach ($request->ajouter as $idpermission) {
-               
+
                 $existsSameRole = DB::table('display_with_company')
                     ->where('idcompany', $request->idcompany)
                     ->where('idpermission', $idpermission)
@@ -296,23 +339,23 @@ class CompanyController extends Controller
                     ->exists();
 
                 if (!$existsSameRole) {
-                   
+
                     DB::table('display_with_company')->insert([
                         'idcompany' => $request->idcompany,
                         'idpermission' => $idpermission,
                         'role' => $request->role,
                     ]);
                 }
-                
+
             }
         }
 
-        
+
         if (!empty($request->supprimer)) {
             DB::table('display_with_company')
                 ->where('idcompany', $request->idcompany)
                 ->whereIn('idpermission', $request->supprimer)
-                ->where('role', $request->role) 
+                ->where('role', $request->role)
                 ->delete();
         }
 
@@ -324,12 +367,12 @@ class CompanyController extends Controller
     {
         $CompanyIsActive = Company::where('status',1)->value('id');
         $ClientByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Client" ',[$CompanyIsActive]);
-        
-        
+
+
         return response()->json([
             'status'      => 200,
             'DataClient'  => $ClientByCompany,
-            'IdCompany'   => $CompanyIsActive, 
+            'IdCompany'   => $CompanyIsActive,
         ]);
 
     }
@@ -338,11 +381,11 @@ class CompanyController extends Controller
     {
         $CompanyIsActive = Company::where('status',1)->value('id');
         $LivreurByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Livreur" ',[$CompanyIsActive]);
-        
+
         return response()->json([
             'status'      => 200,
             'DataLivreur'  => $LivreurByCompany,
-            'IdCompany'   => $CompanyIsActive, 
+            'IdCompany'   => $CompanyIsActive,
         ]);
 
     }
@@ -351,13 +394,13 @@ class CompanyController extends Controller
     {
         $CompanyIsActive = Company::where('status',1)->value('id');
         $ProductByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Product" ',[$CompanyIsActive]);
-        
+
         return response()->json([
             'status'      => 200,
             'DataProduct'  => $ProductByCompany,
-            'IdCompany'   => $CompanyIsActive, 
+            'IdCompany'   => $CompanyIsActive,
         ]);
 
     }
-    
+
 }

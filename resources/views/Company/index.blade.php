@@ -33,9 +33,9 @@
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold m-0">Compagnie </h4>
                 </div>
-                
+
                 <div class="text-end">
-                
+
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
                         <li class="breadcrumb-item active">Compagnie</li>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12"> 
+                <div class="col-12">
                     <div class="card">
 
                         <div class="card-body">
@@ -52,14 +52,14 @@
                                 <button class="btn btn-primary"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCompany">Ajoute compagnie</button>
                                 <button class="btn bg-primary-subtle"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient">Accorder le client à compagnie</button>
                                 <button class="btn btn-info"           style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalLivreurByCompany" id="BtnDisplayLivreur">Accorder le livreur à compagnie</button>
-                                <button class="btn btn-secondary"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button
+                                <button class="btn btn-secondary"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button>
                                 <a href="{{url('Setting')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
                                 <a href="{{url('home')}}" class="btn btn-primary float-end"         style="margin-right: 5px" >Page d'accueil</a>
                             </div>
-                            
+
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">
-                                    
+
                                     <div class="datatable-container" style="height: 665.531px;">
                                         <table class="table datatable datatable-table Table_Company" >
                                             <thead>
@@ -68,25 +68,25 @@
                                                         Compagnie
                                                     </th>
                                                     <th data-sortable="true" style="width: 11.518324607329843%;">Status
-                                                        
+
                                                     </th>
                                                     <th data-sortable="true" style="width: 16.454749439042633%;">
                                                         Créer par
-                                                        
+
                                                     </th>
                                                     <th data-sortable="true" style="width: 15.482423335826478%;">Créer le
-                                                        
+
                                                     </th>
-                                                    
+
                                                     <th data-sortable="true" style="width: 11.36873597606582%;">Action</th>
                                                 </tr>
                                             </thead>
                                                 <tbody>
-                                                   
+
                                                 </tbody>
                                             </table>
                                         </div>
-                                                    
+
                                     </div>
                                 </div>
 
@@ -173,8 +173,8 @@
                     </div>
                         <div class="modal-body">
                             <div class="pt-0">
-                                
-                                
+
+
                                 <ul class="ValidationAddCompany"></ul>
                                 <div class="form-group mb-3 password-container">
                                     <label for="password" class="form-label">Nom compagnie</label>
@@ -211,14 +211,14 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                
+
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
                             <button type="button" class="btn btn-primary" id="SaveClientByCompany">Sauvegarder</button>
                         </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -235,7 +235,7 @@
 
                     <div class="modal-body">
                         <div class="pt-0">
-                            
+
                             <ul class="ValidationAddCompany"></ul>
                             <div class="form-group mb-3 password-container">
                                 <label for="password" class="form-label">Nom compagnie</label>
@@ -273,7 +273,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -293,10 +293,10 @@
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Produit compagnie</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    
+
                     <div class="modal-body">
                         <div class="pt-0">
-                            
+
                             <ul class="ValidationAddCompany"></ul>
                             <div class="form-group mb-3 password-container">
                                 <label for="password" class="form-label">Nom compagnie</label>
@@ -336,7 +336,7 @@
                             {{-- <div class="form-group mb-3 password-container">
                                 <label for="password" class="form-label">Produits</label>
                                 <select name="idpermission[]"  class="form-select" multiple>
-                                    
+
                                     @foreach ($Products as $item)
                                         <option value="{{ $item->id }}">{{ $item->name}}</option>
                                     @endforeach
@@ -349,14 +349,14 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
                         <button type="button" class="btn btn-primary" id="SaveProductByCompany">Sauvegarder</button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
 
-        
 
-        
+
+
 </div>
 
 

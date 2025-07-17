@@ -56,7 +56,7 @@ class MarchandiseEntreeController extends Controller
 
 
         $CompanyIsActive = Company::where('status',1)->value('status');
-        // get id company is status = 1 
+        // get id company is status = 1
         $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
 
         $checkHasCaisseVides = DB::table('caissevides as c')
@@ -76,7 +76,7 @@ class MarchandiseEntreeController extends Controller
         ->where('d.role', 'Client')
         ->select('cl.firstname', 'cl.lastname', 'cl.id')
         ->get();
-        
+
         $Livreurs = DB::table('companys as c')
         ->join('display_with_company as d', 'd.idcompany', '=', 'c.id')
         ->join('livreurs as l', 'l.id', '=', 'd.idpermission')
@@ -96,7 +96,7 @@ class MarchandiseEntreeController extends Controller
         {
             //get company is active
             $CompanyIsActive = Company::where('status',1)->value('status');
-            // get id company is status = 1 
+            // get id company is status = 1
             $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
 
             $Data = DB::table('marchandis_entree as m')
@@ -130,16 +130,16 @@ class MarchandiseEntreeController extends Controller
                     $btn = '';
 
                     $btn .= '<a href="' . url("ViewListMarchandiseEntree/" . $row->id) . '"  target="_blank" class="btn btn-sm bg-primary-subtle me-1"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                data-id="' . $row->id . '" data-bs-toggle="tooltip"
                                 title="visualiser">
                                 <i class="mdi mdi-eye fs-14 text-primary"></i>
 
                             </a>';
-                
+
 
                 if ($row->total_lignes > 0) {
-                    $btn .= '<a href="' . url("PrintMarchandiseEntree/" . $row->id) . '"   class="btn btn-sm bg-warning-subtle me-1 " 
-                                data-id="' . $row->id . '"  
+                    $btn .= '<a href="' . url("PrintMarchandiseEntree/" . $row->id) . '"   class="btn btn-sm bg-warning-subtle me-1 "
+                                data-id="' . $row->id . '"
                                 title="Imprimer cette bon marchandise entrée"
                                 onclick="setTimeout(function(){ window.location.reload(); }, 1000)">
                                 <i class="mdi mdi-printer fs-14 text-warning"></i>
@@ -152,24 +152,24 @@ class MarchandiseEntreeController extends Controller
                                 <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
                             </a>';
                 }
-                
+
                 if(!$row->clotuer)
                 {
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseEntree"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                data-id="' . $row->id . '" data-bs-toggle="tooltip"
                                 title="Supprimer cette bon sortie">
                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                             </a>';
                 }
                 /* if ($user && $user->can('company-supprimer')) { */
-                    
+
                 /* } */
 
                 return $btn;
             })->rawColumns(['action'])->make(true);
 
         }
-        return view('Marchandise_Entree.index') 
+        return view('Marchandise_Entree.index')
         ->with('company',$CompanyIsActive)
         ->with('Clients',$Clients)
         ->with('List_origins',$List_origins)
@@ -182,7 +182,7 @@ class MarchandiseEntreeController extends Controller
         {
             //get company is active
             $CompanyIsActive = Company::where('status',1)->value('status');
-            // get id company is status = 1 
+            // get id company is status = 1
             $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
             $data = DB::table('tmp_ligne_marchandis_entree as t')
             ->join('list_origins as l', 't.idproduct', '=', 'l.id')
@@ -204,16 +204,16 @@ class MarchandiseEntreeController extends Controller
             ->where('t.idclient',$request->idclient)
             ->where('co.id'     ,$IdCompany        )
             ->groupBy(
-                'c.id', 
-                'liv.cin', 
-                'liv.matricule', 
-                'liv.name', 
-                'l.name', 
+                'c.id',
+                'liv.cin',
+                'liv.matricule',
+                'liv.name',
+                'l.name',
                 DB::raw("CONCAT(c.firstname, ' ', c.lastname)")
             )
             ->orderBy('c.id')
             ->get();
-        
+
 
 
             return DataTables::of($data)
@@ -223,22 +223,22 @@ class MarchandiseEntreeController extends Controller
                         $btn = '';
 
                         // زر التعديل (تحقق من الصلاحية)
-                        
+
                             $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 edit_tmp_machandise_entree"
-                                        data-id="' . $row->idtmp . '"  
+                                        data-id="' . $row->idtmp . '"
                                         title="Modifier ligne machandise entrée" >
                                         <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                                     </a>';
-                     
+
 
                         // زر الحذف (تحقق من الصلاحية)
-                        
+
                             $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle delete_tmp_machandise_entree"
-                                        data-id="' . $row->idtmp . '"  
+                                        data-id="' . $row->idtmp . '"
                                         title="Supprimer ligne machandise entrée">
                                         <i class="mdi mdi-delete fs-14 text-danger"></i>
                                     </a>';
-                        
+
 
                         return $btn;
                     })
@@ -251,14 +251,14 @@ class MarchandiseEntreeController extends Controller
     public function TrashTmpMarchandiseEntreByProduct(Request $request)
     {
         $TmpLigneMarchandiseEntree = TmpLigneMarchandiseEntree::find($request->id);
-        
+
         if ($TmpLigneMarchandiseEntree) {
             $TmpLigneMarchandiseEntree->delete();
-            
+
             return response()->json([
                 'status'  => 200,
                 'message' => 'Opération réussie avec succès !',
-                'idclient'=> $TmpLigneMarchandiseEntree->idclient, 
+                'idclient'=> $TmpLigneMarchandiseEntree->idclient,
             ]);
         }
 
@@ -267,24 +267,24 @@ class MarchandiseEntreeController extends Controller
             'message' => 'Élément non trouvé !'
         ]);
 
-        
+
 
     }
 
     public function storeTmpMarchandiseEntree(Request $request)
     {
-        
+
 
         $validator = Validator::make($request->all(), [
             'quantity' => 'required',
             'idclient' => 'required',
             'idlivreur' => 'required',
             'idproduct' => 'required',
-        ], 
-        
+        ],
+
         [
             'required' => 'Le champ :attribute est requis.'
-        ], 
+        ],
 
         [
             'quantity'   => 'nombre ',
@@ -297,7 +297,7 @@ class MarchandiseEntreeController extends Controller
             if ($request->idclient == 0) {
                 $validator->errors()->add('idclient', 'Le champ client est invalide.');
             }
-            
+
             if ($request->idlivreur == 0) {
                 $validator->errors()->add('idlivreur', 'Le champ livreur est invalide.');
             }
@@ -305,7 +305,7 @@ class MarchandiseEntreeController extends Controller
                 $validator->errors()->add('idproduct', 'Le champ produit est invalide.');
             }
         });
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
@@ -323,7 +323,7 @@ class MarchandiseEntreeController extends Controller
         $IdCompany = Company::where('status', $CompanyIsActive)->value('id');
         $data['iduser'] = Auth::user()->id;
         $data['idcompany'] = $IdCompany;
-      
+
         $TmpLigneMarchandiseEntree = TmpLigneMarchandiseEntree::create([
             'quantity'       => $data['quantity'],
             'idproduct'      => $data['idproduct'],
@@ -333,14 +333,14 @@ class MarchandiseEntreeController extends Controller
             'idlivreur'      => $data['idlivreur'],
         ]);
 
-        if ($TmpLigneMarchandiseEntree) 
+        if ($TmpLigneMarchandiseEntree)
         {
             return response()->json([
                 'status'  => 200,
                 'message' => 'Information créée avec succès'
             ]);
-        } 
-        else 
+        }
+        else
         {
             return response()->json([
                 'status'  => 500,
@@ -352,17 +352,17 @@ class MarchandiseEntreeController extends Controller
     public function UpdateTmpMarchandiseQuantityURL(Request $request)
     {
         $TmpLigneMarchandiseEntree = TmpLigneMarchandiseEntree::find($request->id);
-        
+
         if ($TmpLigneMarchandiseEntree) {
             // update tmp
             TmpLigneMarchandiseEntree::where('id',$request->id)->update([
                 'quantity'    => $request->total_quantity,
             ]);
-            
+
             return response()->json([
                 'status'  => 200,
                 'message' => 'Opération réussie avec succès !',
-                'idclient'=> $TmpLigneMarchandiseEntree->idclient, 
+                'idclient'=> $TmpLigneMarchandiseEntree->idclient,
             ]);
         }
 
@@ -374,7 +374,7 @@ class MarchandiseEntreeController extends Controller
 
     public function StoreMarchandiseEntree(Request $request)
     {
-        
+
 
         // Count how many marchandis_entree exist
         $MarchandiseEntree = DB::table('marchandis_entree as m')
@@ -407,7 +407,7 @@ class MarchandiseEntreeController extends Controller
         ->where('iduser', $data['iduser'])
         ->where('idcompany', $data['idcompany'])
         ->get();
-        
+
         // create new marchandis_entree
         $marchandise_entree = marchandise_entree::create([
             'number_box' => $dataTmpMarchandise->sum('quantity'),
@@ -418,6 +418,7 @@ class MarchandiseEntreeController extends Controller
             'idlivreur'  => $dataTmpMarchandise[0]["idlivreur"],
             'iduser'     => $data['iduser'],
             'idcompany'  => $data['idcompany'],
+            'idclient_tmp'=>$dataTmpMarchandise[0]["idclient"],
         ]);
 
         // loop to insert lignes
@@ -463,16 +464,16 @@ class MarchandiseEntreeController extends Controller
         )
         ->where('m.id',$id)
         ->groupBy(
-            'c.id', 
-            'liv.cin', 
-            'liv.matricule', 
-            'liv.name', 
-            'list.name', 
+            'c.id',
+            'liv.cin',
+            'liv.matricule',
+            'liv.name',
+            'list.name',
             DB::raw("CONCAT(c.firstname, ' ', c.lastname)")
         )
         ->orderBy('c.id')
         ->get();
-        
+
         //dd($Data);
         $CompanyIsActive = Company::where('status',1)->value('name');
         $IdClient         = marchandise_entree::where('id',$id)->value('idclient');
@@ -482,7 +483,7 @@ class MarchandiseEntreeController extends Controller
         ->with('id',$id)
         ->with('Clients',$Clients)
         ->with('company',$CompanyIsActive);
-        
+
 
     }
 
@@ -492,7 +493,7 @@ class MarchandiseEntreeController extends Controller
         if($Check_Info == 0)
         {
             return redirect('MarchandisEntre')->with('ErrorsInfos','Veuillez insérer les informations de l\'entreprise');
-            
+
         }
         $Check_Print_Marchandise_Entre = Print_Marchandise_Entre::count();
         if($Check_Print_Marchandise_Entre == 0)
@@ -501,23 +502,23 @@ class MarchandiseEntreeController extends Controller
         }
         // Get the active company status
         $CompanyIsActive = Company::where('status', 1)->value('status');
-        
+
         // Get the company ID where status = 1
         $IdCompany = Company::where('status', $CompanyIsActive)->value('id');
-        
+
         // Check if a record already exists for this company and caissevide ID
         $existingRecord = DB::table('print_marchandise_entree')
             ->where('idcompany', $IdCompany)
             ->where('idmarchandise_entree', $id)
             ->first();
-           
+
         if (!$existingRecord) {
             // Get last number_bon for the company, or default to 0 if none found
             $lastRecord = DB::table('print_marchandise_entree')
                 ->where('idcompany', $IdCompany)
                 ->orderByDesc('id')
                 ->first();
-                
+
             if($lastRecord->number_bon && $lastRecord->idmarchandise_entree == null)
             {
                 $newNumberBon = 1;
@@ -535,8 +536,8 @@ class MarchandiseEntreeController extends Controller
                 ]);
             }
         }
-         
-        try { 
+
+        try {
             $Data = DB::table('marchandis_entree as m')
                 ->join('ligne_marchandis as l', 'l.id_marchandis_entree', '=', 'm.id')
                 ->join('list_origins as list', 'list.id', '=', 'l.idproduct')
@@ -588,20 +589,20 @@ class MarchandiseEntreeController extends Controller
                 }
             }
 
-            
-           
+
+
 
             $userPrintBon = Auth::user()->name;
             $DatePrintBon = Carbon::now();
             $DatePrintBon->format('d-m-Y');
             $TimePrintBon = $DatePrintBon->format('H:i');
-            
+
             $Extract_number_bon = DB::table('print_marchandise_entree')
                 ->where('idcompany', $IdCompany)
                 ->where('idmarchandise_entree', $id)
                 ->orderByDesc('id')
                 ->value('number_bon');
-             
+
              $Client = DB::table('marchandis_entree as m')
                                 ->join('clients as co'  , 'co.id'  , 'm.idclient')
                                 ->where('m.id',$id)
@@ -620,9 +621,9 @@ class MarchandiseEntreeController extends Controller
                 $title = "BON D'ENTRÉE MARCHANDISE";
                 $html = view('Vente.PrintVente',compact('title','data','Achteur','Vendeur','Info','Client','DatePrintBon','TimePrintBon','Extract_number_bon'))->render();
             }
-            
 
-           
+
+
             $mpdf = new Mpdf([
                 'default_font' => 'Amiri', // خاص بالعربية
                 'format' => 'A4',
@@ -630,12 +631,12 @@ class MarchandiseEntreeController extends Controller
                 'margin_top' => 10,
                 'margin_bottom' => 10,
             ]);
-            
+
 
             $mpdf->WriteHTML($html);
             return $mpdf->Output("Bon_Entrée_Marchandise_$id.pdf", 'I'); // I = عرض | D = تحميل | F = تخزين
 
-        } catch (\Exception $e) 
+        } catch (\Exception $e)
         {
             return dd($e->getMessage());
         }
@@ -645,7 +646,7 @@ class MarchandiseEntreeController extends Controller
     {
         //get company is active
         $CompanyIsActive = Company::where('status',1)->value('status');
-        // get id company is status = 1 
+        // get id company is status = 1
         $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
 
         $Print_Marchandise_Entre = Print_Marchandise_Entre::create([
@@ -656,13 +657,13 @@ class MarchandiseEntreeController extends Controller
         return redirect('Setting');
     }
 
-    public function destroy(Request $request) 
+    public function destroy(Request $request)
     {
-        
 
-        try 
+
+        try
         {
-            $id = $request->id; 
+            $id = $request->id;
             // Get the row to be deleted
             $entry = DB::table('marchandis_entree')->where('id', $id)->first();
 
@@ -695,14 +696,14 @@ class MarchandiseEntreeController extends Controller
                     ->update(['cumul' => $cumul]);
             }
 
-            return response()->json(['status' => 200, 'message' => 'Suppression avec succès']);        
-            
-        } 
-        catch (\Exception $e) 
+            return response()->json(['status' => 200, 'message' => 'Suppression avec succès']);
+
+        }
+        catch (\Exception $e)
         {
                 return response()->json(['status' => 500, 'message' => $e->getMessage()]);
         }
     }
 
-    
+
 }

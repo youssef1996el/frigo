@@ -36,7 +36,7 @@ class CaisseSortieController extends Controller
         {
             //get company is active
             $CompanyIsActive = Company::where('status',1)->value('status');
-            // get id company is status = 1 
+            // get id company is status = 1
             $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
 
             $Data_Caisse_Vide = DB::table('caissevides as c')
@@ -58,20 +58,20 @@ class CaisseSortieController extends Controller
 
                 // زر التعديل (تحقق من الصلاحية)
                 /* if ($user && $user->can('company-modifier')) { */
-               /*  $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCaisseVide" 
-                            data-id="' . $row->id . '"  
-                            title="Modifier caisse de vide" 
-                            data-client="' . $row->idcustomer . '" 
+               /*  $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCaisseVide"
+                            data-id="' . $row->id . '"
+                            title="Modifier caisse de vide"
+                            data-client="' . $row->idcustomer . '"
                             data-livreur="' . $row->idDelivery . '">
                             <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
                         </a>'; */
-    
+
                 /* } */
 
-                $btn .= '<a href="' . url("PrintCaisseVide/" . $row->id) . '"   class="btn btn-sm bg-warning-subtle me-1 " 
-                            data-id="' . $row->id . '"  
-                            title="Imprimer cette bon sortie" 
-                            data-client="' . $row->idcustomer . '" 
+                $btn .= '<a href="' . url("PrintCaisseVide/" . $row->id) . '"   class="btn btn-sm bg-warning-subtle me-1 "
+                            data-id="' . $row->id . '"
+                            title="Imprimer cette bon sortie"
+                            data-client="' . $row->idcustomer . '"
                             data-livreur="' . $row->idDelivery . '"
                             onclick="setTimeout(function(){ window.location.reload(); }, 1000)">
                             <i class="mdi mdi-printer fs-14 text-warning"></i>
@@ -83,19 +83,19 @@ class CaisseSortieController extends Controller
                                 <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
                             </a>';
                 }
-                
-    
+
+
 
                 if(!$row->clotuer)
                 {
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseVide"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                                data-id="' . $row->id . '" data-bs-toggle="tooltip"
                                 title="Supprimer cette bon sortie">
                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                             </a>';
                 }
                 /* if ($user && $user->can('company-supprimer')) { */
-                    
+
                 /* } */
 
                 return $btn;
@@ -112,7 +112,7 @@ class CaisseSortieController extends Controller
         ->where('d.role', 'Client')
         ->select('cl.firstname', 'cl.lastname', 'cl.id')
         ->get();
-        
+
         $Livreurs = DB::table('companys as c')
         ->join('display_with_company as d', 'd.idcompany', '=', 'c.id')
         ->join('livreurs as l', 'l.id', '=', 'd.idpermission')
@@ -131,17 +131,17 @@ class CaisseSortieController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'number_box' => 'required',
             'idclient' => 'required',
             'idlivreur' => 'required',
-            
-        ], 
-        
+
+        ],
+
         [
             'required' => 'Le champ :attribute est requis.'
-        ], 
+        ],
 
         [
             'number_box' => 'nombre',
@@ -153,12 +153,12 @@ class CaisseSortieController extends Controller
             if ($request->idclient == 0) {
                 $validator->errors()->add('idclient', 'Le champ client est invalide.');
             }
-            
+
             if ($request->idlivreur == 0) {
                 $validator->errors()->add('idlivreur', 'Le champ livreur est invalide.');
             }
         });
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 400,
@@ -166,7 +166,7 @@ class CaisseSortieController extends Controller
             ]);
         }
 
-        
+
 
         // get last cumul for this client
         $LastCaisseVide = DB::table('caissevides as c')
@@ -197,16 +197,17 @@ class CaisseSortieController extends Controller
             'idlivreur'  => $data['idlivreur'],
             'iduser'     => $data['iduser'],
             'idcompany'  => $data['idcompany'],
+            'idclient_tmp'=> $data['idclient'],
         ]);
 
-        if ($CaisseVide) 
+        if ($CaisseVide)
         {
             return response()->json([
                 'status'  => 200,
                 'message' => 'Caisse de vide créée avec succès'
             ]);
-        } 
-        else 
+        }
+        else
         {
             return response()->json([
                 'status'  => 500,
@@ -215,7 +216,7 @@ class CaisseSortieController extends Controller
         }
 
 
-        
+
 
 
     }
@@ -242,7 +243,7 @@ class CaisseSortieController extends Controller
                 'errors' => $validator->messages(),
             ]);
         }
-       
+
         $CaisseVide = CaisseVide::find($request->id);
         if (!$CaisseVide) {
             return response()->json([
@@ -295,42 +296,42 @@ class CaisseSortieController extends Controller
 
     public function destroy(Request $request)
     {
-        
+
         try {
             $id = $request->id; // ID caissevide
-            
+
             $caisse = DB::table('caissevides')->where('id', $id)->first();
-        
+
             if (!$caisse) {
                 return response()->json(['status' => 404, 'message' => 'Caisse Vide non trouvée']);
             }
-        
+
             $idclient = $caisse->idclient;
             $idcompany = $caisse->idcompany;
-        
+
             // حذف السجل
             DB::table('caissevides')->where('id', $id)->delete();
-        
+
             // إعادة حساب الكوميل
             $total_cumul = DB::table('caissevides')
                             ->where('idclient', $idclient)
                             ->where('idcompany', $idcompany)
                             ->sum('number_box'); // جمع عدد الصناديق
-        
+
             // تحديث الكوميل في جدول caissevides
             DB::table('caissevides')
                 ->where('idclient', $idclient)
                 ->where('idcompany', $idcompany)
                 ->update(['cumul' => $total_cumul]);
-        
+
             return response()->json(['status' => 200, 'message' => 'Suppression avec succès']);
-        
+
         } catch (\Exception $e) {
             return response()->json(['status' => 500, 'message' => $e->getMessage()]);
         }
-        
-        
-        
+
+
+
     }
 
 
@@ -339,7 +340,7 @@ class CaisseSortieController extends Controller
     {
         //get company is active
         $CompanyIsActive = Company::where('status',1)->value('status');
-        // get id company is status = 1 
+        // get id company is status = 1
         $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
 
         $Print_Caisse_Vides = Print_Caisse_Vides::create([
