@@ -365,7 +365,22 @@ class CompanyController extends Controller
 
     public function DisplayClientBycompany(Request $request)
     {
-        $CompanyIsActive = Company::where('status',1)->value('id');
+
+        $CompanyIsActive = 0 ;
+        if(isset($request["data"]))
+        {
+
+            $CompanyIsActive = Company::where('status',1)->value('id');
+        }
+        else
+        {
+
+            $CompanyIsActive = $request->idcompany;
+        }
+
+
+
+
         $ClientByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Client" ',[$CompanyIsActive]);
 
 
@@ -379,7 +394,17 @@ class CompanyController extends Controller
 
     public function DisplayLivreurBycompany(Request $request)
     {
-        $CompanyIsActive = Company::where('status',1)->value('id');
+        $CompanyIsActive = 0 ;
+        if(isset($request["data"]))
+        {
+
+            $CompanyIsActive = Company::where('status',1)->value('id');
+        }
+        else
+        {
+
+            $CompanyIsActive = $request->idcompany;
+        }
         $LivreurByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Livreur" ',[$CompanyIsActive]);
 
         return response()->json([
@@ -392,7 +417,17 @@ class CompanyController extends Controller
 
     public function DisplayProductBycompany(Request $request)
     {
-        $CompanyIsActive = Company::where('status',1)->value('id');
+         $CompanyIsActive = 0 ;
+        if(isset($request["data"]))
+        {
+
+            $CompanyIsActive = Company::where('status',1)->value('id');
+        }
+        else
+        {
+
+            $CompanyIsActive = $request->idcompany;
+        }
         $ProductByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Product" ',[$CompanyIsActive]);
 
         return response()->json([

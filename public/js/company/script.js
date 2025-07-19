@@ -1,13 +1,13 @@
 $(document).ready(function () {
-    
-        
-  
-    
+
+
+
+
 
 
 
     // fetch data company
-    
+
     $(function ()
     {
         /* if ($.fn.DataTable.isDataTable(selector)) {
@@ -78,7 +78,7 @@ $(document).ready(function () {
                 $('#nameCompanyEdit').val(nameCompany);
                 $('#statusCompanyEdit').val(isActive);
                 $('#EditCompany').attr('data-value',IdcCompany);
-                
+
 
             });
 
@@ -145,12 +145,12 @@ $(document).ready(function () {
 
         }
     });
-        
-   
-    // Add Company 
+
+
+    // Add Company
     $('#AddCompany').on('click',function(e) {
         e.preventDefault(); // هذه السطر مهم لمنع الإرسال الافتراضي للنموذج.
-        
+
         let nameCompany = $('#nameCompany').val();
         let statusCompany = $('#statusCompany').val();
         $.ajax({
@@ -174,13 +174,13 @@ $(document).ready(function () {
                     $.each(response.errors, function(key, list_err) {
                         $('.ValidationAddCompany').append('<li>' + list_err + '</li>');
                     });
-    
+
                     setTimeout(() => {
                         $('.ValidationAddCompany').fadeOut('slow', function() {
                             $(this).html("").removeClass('alert alert-danger').show();
                         });
                     }, 5000);
-                }    
+                }
             }
         });
     }); // end Add company
@@ -222,7 +222,7 @@ $(document).ready(function () {
                     $.each(response.errors, function(key, list_err) {
                         $('.ValidationAddCompany').append('<li>' + list_err + '</li>');
                     });
-    
+
                     setTimeout(() => {
                         $('.ValidationAddCompany').fadeOut('slow', function() {
                             $(this).html("").removeClass('alert alert-danger').show();
@@ -233,29 +233,29 @@ $(document).ready(function () {
                 {
                     new AWN().warning(response.message, {durations: {warning: 5000}})
                     /* setTimeout(() => {
-                        
+
                     }, 5000); */
-                    
+
                 }
             }
         });
     });
 
 
-    
+
     //$('#TableClientByCompany').DataTable();
 
 
     $(function ()
     {
-       
+
         TableClientByCompany('#TableClientByCompany');
         function TableClientByCompany(selector)
         {
             var TableClientByCompany = $(selector).DataTable({
-                
-                
-               
+
+
+
                 language: {
                     "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
                     "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
@@ -286,7 +286,7 @@ $(document).ready(function () {
                     }
                 }
             });
-            
+
 
         }
     });
@@ -305,7 +305,7 @@ $(document).ready(function () {
             //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
 
             new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.', {durations: {warning: 5000}});
-            
+
             // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
             $(this).prop('checked', false);
         }
@@ -325,7 +325,7 @@ $(document).ready(function () {
             //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
 
             new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même livreur.', {durations: {warning: 5000}});
-            
+
             // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
             $(this).prop('checked', false);
         }
@@ -345,20 +345,20 @@ $(document).ready(function () {
             //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
 
             new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même produit.', {durations: {warning: 5000}});
-            
+
             // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
             $(this).prop('checked', false);
         }
     });
 
-    $('#SaveClientByCompany').on('click', function (e) 
+    $('#SaveClientByCompany').on('click', function (e)
     {
         e.preventDefault();
 
         let ajouterIds = [];
         let supprimerIds = [];
 
-        $('#TableClientByCompany tbody tr').each(function () 
+        $('#TableClientByCompany tbody tr').each(function ()
         {
             let row = $(this);
             let ajouterCheckbox = row.find('input.ajouter');
@@ -410,14 +410,14 @@ $(document).ready(function () {
 
 
 
-    $('#SaveLivreurByCompany').on('click', function (e) 
+    $('#SaveLivreurByCompany').on('click', function (e)
     {
         e.preventDefault();
 
         let ajouterIds = [];
         let supprimerIds = [];
 
-        $('#TableLivreurByCompany tbody tr').each(function () 
+        $('#TableLivreurByCompany tbody tr').each(function ()
         {
             let row = $(this);
             let ajouterCheckbox = row.find('input.ajouter');
@@ -446,7 +446,7 @@ $(document).ready(function () {
         }
 
         let idCompany = $("#CompanyLivreur").val();
-       
+
         $.ajax({
             url: SaveLivreurByCompany,
             method: "POST",
@@ -470,14 +470,14 @@ $(document).ready(function () {
 
 
 
-    $('#SaveProductByCompany').on('click', function (e) 
+    $('#SaveProductByCompany').on('click', function (e)
     {
         e.preventDefault();
 
         let ajouterIds = [];
         let supprimerIds = [];
 
-        $('#TableProductByCompany tbody tr').each(function () 
+        $('#TableProductByCompany tbody tr').each(function ()
         {
             let row = $(this);
             let ajouterCheckbox = row.find('input.ajouter');
@@ -550,12 +550,41 @@ $(document).ready(function () {
                     });
                 }
             }
-        }); 
+        });
+    });
+
+    $('#select-company').on('change',function(e)
+    {
+        e.preventDefault();
+        let idcompany = $(this).val();
+        $.ajax({
+            type: "get",
+            url: DisplayClientBycompany,
+            data:
+            {
+                idcompany : idcompany,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    //$('#select-company').val(response.IdCompany).change();
+                    let clientIds = response.DataClient.map(item => item.idpermission);
+                    $('#TableClientByCompany tbody tr').each(function () {
+                        let checkboxValue = $(this).find('.ajouter').val();
+                        if (clientIds.includes(parseInt(checkboxValue))) {
+                            $(this).find('.ajouter').prop('checked', true);
+                        } else {
+                            $(this).find('.ajouter').prop('checked', false);
+                        }
+                    });
+                }
+            }
+        });
     });
 
     $('#BtnDisplayLivreur').on('click',function(e)
     {
-       e.preventDefault();
+        e.preventDefault();
         $.ajax({
             type: "get",
             url: DisplayLivreurBycompany,
@@ -578,10 +607,42 @@ $(document).ready(function () {
         });
     });
 
-
-    $('#BtnDisplayProduct').on('click',function(e)
+    $('#CompanyLivreur').on('change',function(e)
     {
-       e.preventDefault();
+        e.preventDefault();
+        let idcompany = $(this).val();
+        $.ajax({
+            type: "get",
+            url: DisplayLivreurBycompany,
+            data:
+            {
+                idcompany : idcompany,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    //$('#CompanyLivreur').val(response.IdCompany).change();
+                    let LivreurIds = response.DataLivreur.map(item => item.idpermission);
+                    $('#TableLivreurByCompany tbody tr').each(function () {
+                        let checkboxValue = $(this).find('.ajouter').val();
+                        if (LivreurIds.includes(parseInt(checkboxValue))) {
+                            $(this).find('.ajouter').prop('checked', true);
+                        } else {
+                            $(this).find('.ajouter').prop('checked', false);
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+    $('#BtnDisplayProduct').on('click', function (e) {
+        e.preventDefault();
+
+        // Disable the button to prevent multiple clicks
+        $(this).prop('disabled', true);
+
         $.ajax({
             type: "get",
             url: DisplayProductBycompany,
@@ -600,11 +661,45 @@ $(document).ready(function () {
                         }
                     });
                 }
+            },
+            complete: function () {
+                // Re-enable the button after the request completes
+                $('#BtnDisplayProduct').prop('disabled', false);
             }
         });
     });
 
-    
 
-    
+    $('#CompanyProduct').on('change',function(e)
+    {
+        e.preventDefault();
+        let idcompany = $(this).val();
+        $.ajax({
+            type: "get",
+            url: DisplayProductBycompany,
+            data:
+            {
+                idcompany : idcompany,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    //$('#CompanyProduct').val(response.IdCompany).change();
+                    let ProductIds = response.DataProduct.map(item => item.idpermission);
+                    $('#TableProductByCompany tbody tr').each(function () {
+                        let checkboxValue = $(this).find('.ajouter').val();
+                        if (ProductIds.includes(parseInt(checkboxValue))) {
+                            $(this).find('.ajouter').prop('checked', true);
+                        } else {
+                            $(this).find('.ajouter').prop('checked', false);
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+
+
+
 });
