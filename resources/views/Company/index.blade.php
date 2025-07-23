@@ -36,9 +36,9 @@
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold m-0">Compagnie </h4>
                 </div>
-                
+
                 <div class="text-end">
-                
+
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
                         <li class="breadcrumb-item active">Compagnie</li>
@@ -47,7 +47,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12"> 
+                <div class="col-12">
                     <div class="card">
 
                         <div class="card-body">
@@ -59,10 +59,10 @@
                                 <a href="{{url('Setting')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
                                 <a href="{{url('home')}}" class="btn btn-primary float-end"         style="margin-right: 5px" >Page d'accueil</a>
                             </div>
-                            
+
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">
-                                    
+
                                     <div class="datatable-container" style="height: 665.531px;">
                                         <table class="table datatable datatable-table Table_Company" >
                                             <thead>
@@ -71,25 +71,25 @@
                                                         Compagnie
                                                     </th>
                                                     <th data-sortable="true" style="width: 11.518324607329843%;">Status
-                                                        
+
                                                     </th>
                                                     <th data-sortable="true" style="width: 16.454749439042633%;">
                                                         Créer par
-                                                        
+
                                                     </th>
                                                     <th data-sortable="true" style="width: 15.482423335826478%;">Créer le
-                                                        
+
                                                     </th>
-                                                    
+
                                                     <th data-sortable="true" style="width: 11.36873597606582%;">Action</th>
                                                 </tr>
                                             </thead>
                                                 <tbody>
-                                                   
+
                                                 </tbody>
                                             </table>
                                         </div>
-                                                    
+
                                     </div>
                                 </div>
 
@@ -175,6 +175,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                         <div class="modal-body">
+<<<<<<< HEAD
                         <div class="pt-0">
                             <ul class="ValidationAddCompany"></ul>
 
@@ -187,6 +188,48 @@
                                     @endforeach
                                 </select>
                                 <input type="hidden" name="role" value="Client">
+=======
+                            <div class="pt-0">
+
+
+                                <ul class="ValidationAddCompany"></ul>
+                                <div class="form-group mb-3 password-container">
+                                    <label for="password" class="form-label">Nom compagnie</label>
+                                    <select name="idcompany" id="select-company" class="form-select">
+                                        @foreach ($ListCompany as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" name="role" value="Client" hidden>
+                                </div>
+                                <table class="table table-responsive table-bordered" id="TableClientByCompany">
+                                    <thead>
+                                        <tr >
+                                            <th>Clients</th>
+                                            <th class="text-center">Ajouter</th>
+                                            <th class="text-center">Supprimer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($Clients as $item)
+                                            <tr>
+                                                <td>{{$item->firstname . ' ' . $item->lastname}}</td>
+                                                <td>
+                                                    <div class="form-check d-flex justify-content-center">
+                                                        <input class="form-check-input ajouter" type="checkbox" value="{{$item->id}}" name="ajouter[]" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check d-flex justify-content-center">
+                                                        <input class="form-check-input supprimer" type="checkbox" value="{{$item->id}}" name="supprimer[]" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+>>>>>>> 693ca77e3be7104196b8da5d2d8d13687116fb6c
                             </div>
 
                             {{-- Clients Table --}}
@@ -209,6 +252,7 @@
                                 </tbody>
                             </table>
                         </div>
+<<<<<<< HEAD
                     </div>
 
                     <div class="modal-footer">
@@ -216,6 +260,13 @@
                         <button type="button" class="btn btn-primary" id="SaveClientByCompany">Sauvegarder</button>
                     </div>
                     
+=======
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
+                            <button type="button" class="btn btn-primary" id="SaveClientByCompany">Sauvegarder</button>
+                        </div>
+
+>>>>>>> 693ca77e3be7104196b8da5d2d8d13687116fb6c
                 </div>
             </div>
         </div>
@@ -232,7 +283,7 @@
 
                     <div class="modal-body">
                         <div class="pt-0">
-                            
+
                             <ul class="ValidationAddCompany"></ul>
                             <div class="form-group mb-3 password-container">
                                 <label for="password" class="form-label">Nom compagnie</label>
@@ -266,7 +317,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -286,10 +337,10 @@
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Produit compagnie</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    
+
                     <div class="modal-body">
                         <div class="pt-0">
-                            
+
                             <ul class="ValidationAddCompany"></ul>
                             <div class="form-group mb-3 password-container">
                                 <label for="password" class="form-label">Nom compagnie</label>
@@ -323,7 +374,7 @@
                             {{-- <div class="form-group mb-3 password-container">
                                 <label for="password" class="form-label">Produits</label>
                                 <select name="idpermission[]"  class="form-select" multiple>
-                                    
+
                                     @foreach ($Products as $item)
                                         <option value="{{ $item->id }}">{{ $item->name}}</option>
                                     @endforeach
@@ -336,14 +387,14 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
                         <button type="button" class="btn btn-primary" id="SaveProductByCompany">Sauvegarder</button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
 
-        
 
-        
+
+
 </div>
 
 

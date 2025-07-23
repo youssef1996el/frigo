@@ -37,9 +37,9 @@ class StituationController extends Controller
         $dataCaisseVide = [];
         $totalsCaisseVide = [];
 
-        foreach ($queryCaisseVide as $item) 
+        foreach ($queryCaisseVide as $item)
         {
-            if (!isset($dataCaisseVide[$item->dateoperation])) 
+            if (!isset($dataCaisseVide[$item->dateoperation]))
             {
                 $dataCaisseVide[$item->dateoperation]                      = array_fill_keys($clientsCaisseVide, ['nombre' => 0, 'Cuml' => 0]);
             }
@@ -93,7 +93,7 @@ class StituationController extends Controller
         $clientsMarchEntree = $query->pluck('client')->unique()->toArray();
         $dataMarchEntree = [];
         $totalsMarchEntree = [];
-        
+
         foreach ($query as $item)
         {
             if (!isset($dataMarchEntree[$item->dateoperation][$item->client])) {
@@ -116,7 +116,7 @@ class StituationController extends Controller
                 ? $totalsMarchEntree[$item->dateoperation]['totalCuml'] + $item->cuml
                 : $item->cuml;
         }
-         
+
         $totalsMarchEntree['grandTotalNombre'] = array_sum(array_column($totalsMarchEntree, 'totalNombre'));
         $totalsMarchEntree['grandTotalCuml'] = array_sum(array_column($totalsMarchEntree, 'totalCuml'));
 
@@ -134,7 +134,7 @@ class StituationController extends Controller
         ->with('company', $CompanyIsActive)
         ->with('CompanyIsActiveID' ,$CompanyIsActiveID);
 
-        
+
     }
 
 
@@ -157,7 +157,7 @@ class StituationController extends Controller
             ->get();
 
 
-        
+
 
 
 
@@ -188,13 +188,13 @@ class StituationController extends Controller
         }
         $totalsMarchSortie['grandTotalNombre'] = array_sum(array_column($totalsMarchSortie, 'totalNombre'));
         $totalsMarchSortie['grandTotalCuml'] = array_sum(array_column($totalsMarchSortie, 'totalCuml'));
-        
+
 
          $CompanyIsActive                      = Company::where('status', 1)->value('name');
 
         $CompanyIsActiveID                    = Company::where('status', 1)->value('id');
         return view('SituationStockage.StituationMarchandiseSortie.index')
-       
+
 
 
         ->with('dataMarchSortie',$dataMarchSortie)
@@ -224,8 +224,8 @@ class StituationController extends Controller
             ->where('tcs.idcompany', '=', $companyId)
             ->groupBy('clients.id', DB::raw('DATE(tcs.created_at)'))
             ->orderBy(DB::raw('DATE(tcs.created_at)'))
-            ->get(); 
-       
+            ->get();
+
 
         $clientsCaisseRetour = $queryCaisseRetour->pluck('client')->unique()->toArray();
         $dataCaisseRetour = [];
@@ -259,7 +259,7 @@ class StituationController extends Controller
         foreach ($dataCaisseRetour as $date => $values) {
             $sum = 0;
             foreach ($values as $item) {
-                $sum += (float) $item['nombre']; 
+                $sum += (float) $item['nombre'];
             }
             $sumByDate[$date] = $sum;
         }
@@ -270,7 +270,7 @@ class StituationController extends Controller
         foreach ($dataCaisseRetour as $date => $values) {
             $sum = 0;
             foreach ($values as $item) {
-                $sum += (float) $item['Cuml']; 
+                $sum += (float) $item['Cuml'];
             }
             $sumCumlByDate[$date] = $sum;
         }
@@ -420,6 +420,7 @@ class StituationController extends Controller
         ->where('d.role', 'Client')
         ->select('cl.*')
         ->get();
+
         $data = [];
         $totalCaisse = 0;
         $totalMarchandise = 0;
@@ -460,13 +461,14 @@ class StituationController extends Controller
             $totalCaisse += $caisse_vide_chez_clt;
             $totalMarchandise += $marchandise_stock;
         }
+
         $company                      = Company::where('status', 1)->value('name');
         $Compagnie = Company::all();
         $CompanyIsActiveID                    = Company::where('status', 1)->value('id');
         return view('SituationStockage.StituationClient.index',
-         compact('data', 'totalCaisse', 
+         compact('data', 'totalCaisse',
          'totalMarchandise', 'companyId','Compagnie',
-        
+
         'company','CompanyIsActiveID'));
     }
 

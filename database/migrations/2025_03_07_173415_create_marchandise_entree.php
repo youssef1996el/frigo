@@ -18,12 +18,18 @@ return new class extends Migration
             $table->string('etranger')->nullable();
             $table->string('type')->default('normale');
             $table->boolean('clotuer')->default(false);
-            
+
             $table->foreignId('iduser')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('idclient')->references('id')->on('clients')->onDelete('cascade');
+
+            $table->unsignedBigInteger('idclient')->nullable();
+            $table->foreign('idclient')->references('id')->on('clients')->onDelete('set null');
+
+            //$table->foreignId('idclient')->references('id')->on('clients')->onDelete('cascade');
+
             $table->foreignId('idlivreur')->references('id')->on('livreurs')->onDelete('cascade');
             $table->foreignId('idcompany')->references('id')->on('companys')->onDelete('cascade');
             $table->integer('idvente')->nullable();
+            $table->integer('idclient_tmp')->nullable();
             $table->timestamps();
         });
     }
