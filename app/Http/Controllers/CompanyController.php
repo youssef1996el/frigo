@@ -14,6 +14,10 @@ use App\Models\Livreur;
 use App\Models\List_origins;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DisplayByCompany;
+use App\Models\CaisseVide;
+use App\Models\marchandise_entree;
+use App\Models\marchandise_sortie;
+use App\Models\CaisseRetour;
 class CompanyController extends Controller
 {
     public function index(Request $request)
@@ -180,52 +184,29 @@ class CompanyController extends Controller
 
     public function SaveClientByCompany(Request $request)
     {
-        
-        
-
         $request->validate([
             'idcompany' => 'required|integer',
-            'ajouter' => 'nullable|array',
-            'ajouter.*' => 'integer',
-            'supprimer' => 'nullable|array',
-            'supprimer.*' => 'integer',
+            'selected_ids' => 'required|array',
+            'selected_ids.*' => 'integer',
             'role' => 'required|string'
         ]);
 
-        
-        if (!empty($request->ajouter)) {
-            foreach ($request->ajouter as $idpermission) {
-               
-                $existsSameRole = DB::table('display_with_company')
-                    ->where('idcompany', $request->idcompany)
-                    ->where('idpermission', $idpermission)
-                    ->where('role', $request->role)
-                    ->exists();
+        // Supprimer tous les anciens liens pour cette compagnie et ce rôle
+        DB::table('display_with_company')
+            ->where('idcompany', $request->idcompany)
+            ->where('role', $request->role)
+            ->delete();
 
-                if (!$existsSameRole) {
-                   
-                    DB::table('display_with_company')->insert([
-                        'idcompany' => $request->idcompany,
-                        'idpermission' => $idpermission,
-                        'role' => $request->role,
-                    ]);
-                }
-                
-            }
+        // Insérer les nouvelles liaisons (checkbox cochés)
+        foreach ($request->selected_ids as $idpermission) {
+            DB::table('display_with_company')->insert([
+                'idcompany' => $request->idcompany,
+                'idpermission' => $idpermission,
+                'role' => $request->role,
+            ]);
         }
 
-        
-        if (!empty($request->supprimer)) {
-            DB::table('display_with_company')
-                ->where('idcompany', $request->idcompany)
-                ->whereIn('idpermission', $request->supprimer)
-                ->where('role', $request->role) 
-                ->delete();
-        }
-
-        return response()->json(['success' => true]);
-
-        
+        return response()->json(['success' => true, 'message' => 'Les clients ont été mis à jour avec succès.']);
     }
 
     public function SaveLivreurByCompany(Request $request)
@@ -233,96 +214,71 @@ class CompanyController extends Controller
         
         $request->validate([
             'idcompany' => 'required|integer',
-            'ajouter' => 'nullable|array',
-            'ajouter.*' => 'integer',
-            'supprimer' => 'nullable|array',
-            'supprimer.*' => 'integer',
+            'selected_ids' => 'required|array',
+            'selected_ids.*' => 'integer',
             'role' => 'required|string'
         ]);
-
         
-        if (!empty($request->ajouter)) {
-            foreach ($request->ajouter as $idpermission) {
-               
-                $existsSameRole = DB::table('display_with_company')
-                    ->where('idcompany', $request->idcompany)
-                    ->where('idpermission', $idpermission)
-                    ->where('role', $request->role)
-                    ->exists();
+        // Supprimer tous les anciens liens pour cette compagnie et ce rôle
+        DB::table('display_with_company')
+            ->where('idcompany', $request->idcompany)
+            ->where('role', $request->role)
+            ->delete();
 
-                if (!$existsSameRole) {
-                   
-                    DB::table('display_with_company')->insert([
-                        'idcompany' => $request->idcompany,
-                        'idpermission' => $idpermission,
-                        'role' => $request->role,
-                    ]);
-                }
-                
-            }
+        // Insérer les nouvelles liaisons (checkbox cochés)
+        foreach ($request->selected_ids as $idpermission) {
+            DB::table('display_with_company')->insert([
+                'idcompany' => $request->idcompany,
+                'idpermission' => $idpermission,
+                'role' => $request->role,
+            ]);
         }
 
-        
-        if (!empty($request->supprimer)) {
-            DB::table('display_with_company')
-                ->where('idcompany', $request->idcompany)
-                ->whereIn('idpermission', $request->supprimer)
-                ->where('role', $request->role) 
-                ->delete();
-        }
-
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => 'Les livreurs ont été mis à jour avec succès.']);
     }
 
     public function SaveProductByCompany(Request $request)
     {
         $request->validate([
             'idcompany' => 'required|integer',
-            'ajouter' => 'nullable|array',
-            'ajouter.*' => 'integer',
-            'supprimer' => 'nullable|array',
-            'supprimer.*' => 'integer',
+            'selected_ids' => 'required|array',
+            'selected_ids.*' => 'integer',
             'role' => 'required|string'
         ]);
-
         
-        if (!empty($request->ajouter)) {
-            foreach ($request->ajouter as $idpermission) {
-               
-                $existsSameRole = DB::table('display_with_company')
-                    ->where('idcompany', $request->idcompany)
-                    ->where('idpermission', $idpermission)
-                    ->where('role', $request->role)
-                    ->exists();
+        // Supprimer tous les anciens liens pour cette compagnie et ce rôle
+        DB::table('display_with_company')
+            ->where('idcompany', $request->idcompany)
+            ->where('role', $request->role)
+            ->delete();
 
-                if (!$existsSameRole) {
-                   
-                    DB::table('display_with_company')->insert([
-                        'idcompany' => $request->idcompany,
-                        'idpermission' => $idpermission,
-                        'role' => $request->role,
-                    ]);
-                }
-                
-            }
+        // Insérer les nouvelles liaisons (checkbox cochés)
+        foreach ($request->selected_ids as $idpermission) {
+            DB::table('display_with_company')->insert([
+                'idcompany' => $request->idcompany,
+                'idpermission' => $idpermission,
+                'role' => $request->role,
+            ]);
         }
 
+        return response()->json(['success' => true, 'message' => 'Les produits ont été mis à jour avec succès.']);
         
-        if (!empty($request->supprimer)) {
-            DB::table('display_with_company')
-                ->where('idcompany', $request->idcompany)
-                ->whereIn('idpermission', $request->supprimer)
-                ->where('role', $request->role) 
-                ->delete();
-        }
-
-        return response()->json(['success' => true]);
     }
 
 
     public function DisplayClientBycompany(Request $request)
     {
-        $CompanyIsActive = Company::where('status',1)->value('id');
+        $CompanyIsActive = 0 ;
+        if(isset($request["data"]))
+        {
+
+            $CompanyIsActive = Company::where('status',1)->value('id');
+        }
+        else
+        {
+
+            $CompanyIsActive = $request->idcompany;
+        }
         $ClientByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Client" ',[$CompanyIsActive]);
         
         
@@ -336,7 +292,17 @@ class CompanyController extends Controller
 
     public function DisplayLivreurBycompany(Request $request)
     {
-        $CompanyIsActive = Company::where('status',1)->value('id');
+        $CompanyIsActive = 0 ;
+        if(isset($request["data"]))
+        {
+
+            $CompanyIsActive = Company::where('status',1)->value('id');
+        }
+        else
+        {
+
+            $CompanyIsActive = $request->idcompany;
+        }
         $LivreurByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Livreur" ',[$CompanyIsActive]);
         
         return response()->json([
@@ -349,7 +315,17 @@ class CompanyController extends Controller
 
     public function DisplayProductBycompany(Request $request)
     {
-        $CompanyIsActive = Company::where('status',1)->value('id');
+        $CompanyIsActive = 0 ;
+        if(isset($request["data"]))
+        {
+
+            $CompanyIsActive = Company::where('status',1)->value('id');
+        }
+        else
+        {
+
+            $CompanyIsActive = $request->idcompany;
+        }
         $ProductByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Product" ',[$CompanyIsActive]);
         
         return response()->json([
@@ -358,6 +334,126 @@ class CompanyController extends Controller
             'IdCompany'   => $CompanyIsActive, 
         ]);
 
+    }
+
+    public function CheckClientCanDelete(Request $request)
+    {
+        $ID_Client = $request->itemID;
+        $ID_Company = $request->IdCompany;
+
+        $checks = [
+            [
+                'model' => \App\Models\CaisseVide::class,
+                'message' => 'je ne peux pas supprimer ce client car il est en caisse vide'
+            ],
+            [
+                'model' => \App\Models\marchandise_entree::class,
+                'message' => 'je ne peux pas supprimer ce client car il est en marchandises entrée'
+            ],
+            [
+                'model' => \App\Models\marchandise_sortie::class,
+                'message' => 'je ne peux pas supprimer ce client car il est en marchandises sortie'
+            ],
+            [
+                'model' => \App\Models\CaisseRetour::class,
+                'message' => 'je ne peux pas supprimer ce client car il est en caisse retour'
+            ],
+        ];
+
+        foreach ($checks as $check) {
+            $count = $check['model']::where('idclient', $ID_Client)
+                ->where('idcompany', $ID_Company)
+                ->count();
+
+            if ($count > 0) {
+                return response()->json([
+                    'status'  => 404,
+                    'message' => $check['message']
+                ]);
+            }
+        }
+
+    }
+
+    public function CheckLivreurCanDelete(Request $request)
+    {
+        $ID_Livreur = $request->itemID;
+        $ID_Company = $request->IdCompany;
+
+        $checks = [
+            [
+                'model' => \App\Models\CaisseVide::class,
+                'message' => 'je ne peux pas supprimer ce livreur car il est en caisse vide'
+            ],
+            [
+                'model' => \App\Models\marchandise_entree::class,
+                'message' => 'je ne peux pas supprimer ce livreur car il est en marchandises entrée'
+            ],
+            [
+                'model' => \App\Models\marchandise_sortie::class,
+                'message' => 'je ne peux pas supprimer ce livreur car il est en marchandises sortie'
+            ],
+            [
+                'model' => \App\Models\CaisseRetour::class,
+                'message' => 'je ne peux pas supprimer ce livreur car il est en caisse retour'
+            ],
+        ];
+
+        foreach ($checks as $check) {
+            $count = $check['model']::where('idlivreur', $ID_Livreur)
+                ->where('idcompany', $ID_Company)
+                ->count();
+
+            if ($count > 0) {
+                return response()->json([
+                    'status'  => 404,
+                    'message' => $check['message']
+                ]);
+            }
+        }
+    }
+
+    public function CheckProductCanDelete(Request $request)
+    {
+        $ID_Product = $request->itemID;
+        $ID_Company = $request->IdCompany;
+
+        $checks = [
+            [
+                'table'     => 'ligne_marchandis',
+                'joinTable' => 'marchandis_entree',
+                'foreignKey' => 'ligne_marchandis.id_marchandis_entree',
+                'joinKey'   => 'marchandis_entree.id',
+                'message'   => 'je ne peux pas supprimer ce produit car il est en marchandises entrée'
+            ],
+            [
+                'table'     => 'ligne_marchandise_sortie',
+                'joinTable' => 'marchandise_sortie',
+                'foreignKey' => 'ligne_marchandise_sortie.id_marchandise_sortie',
+                'joinKey'   => 'marchandise_sortie.id',
+                'message'   => 'je ne peux pas supprimer ce produit car il est en marchandises sortie'
+            ],
+        ];
+        
+        $check_machandise_entre = DB::select('select count(*) as total from marchandis_entree m , ligne_marchandis l where m.id = l.id_marchandis_entree and l.idproduct = ? and m.idcompany = ?',[$ID_Product,$ID_Company]);
+        
+        if($check_machandise_entre[0]->total > 0)
+        {
+            return response()->json([
+                'status'  => 404,
+                'message' => 'je ne peux pas supprimer ce produit car il est en marchandises entrée'
+            ]);
+        }
+        
+        $check_machandise_sortie = DB::select('select count(*) as total from marchandise_sortie m , ligne_marchandise_sortie l where m.id = l.id_marchandise_sortie and l.idproduct = ? and m.idcompany = ?',[$ID_Product,$ID_Company]);
+
+        if($check_machandise_sortie[0]->total > 0)
+        {
+            return response()->json([
+                'status'  => 404,
+                'message' => 'je ne peux pas supprimer ce produit car il est en marchandises sortie'
+            ]);
+        }
     }
     
 }

@@ -50,6 +50,9 @@ Route::group(['middleware' => ['web','auth']], function ()
     Route::get('DisplayClientBycompany'   ,[CompanyController::class,'DisplayClientBycompany'     ]);
     Route::get('DisplayLivreurBycompany'  ,[CompanyController::class,'DisplayLivreurBycompany'    ]);
     Route::get('DisplayProductBycompany'  ,[CompanyController::class,'DisplayProductBycompany'    ]);
+    Route::get('CheckClientCanDelete'     ,[CompanyController::class,'CheckClientCanDelete'       ]);
+    Route::get('CheckLivreurCanDelete'    ,[CompanyController::class,'CheckLivreurCanDelete'      ]);
+    Route::get('CheckProductCanDelete'    ,[CompanyController::class,'CheckProductCanDelete'      ]);
     /****************************************************** End Company ********************************************/
 
     /****************************************************** Client ********************************************/

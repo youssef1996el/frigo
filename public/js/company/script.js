@@ -291,102 +291,27 @@ $(document).ready(function () {
         }
     });
 
-    $('#TableClientByCompany').on('change', 'input[type="checkbox"]', function () {
-        let $row = $(this).closest('tr'); // احصل على الصف الحالي
+    
 
-        // الحصول على جميع الـ checkboxات في هذا الصف
-        let $checkboxes = $row.find('input[type="checkbox"]');
+    
 
-        // تحقق كم عددها التي تم تحديدها
-        let checkedCount = $checkboxes.filter(':checked').length;
-
-        // إذا تم اختيار checkboxين في نفس الصف، عرض رسالة
-        if (checkedCount === 2) {
-            //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
-
-            new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.', {durations: {warning: 5000}});
-            
-            // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
-            $(this).prop('checked', false);
-        }
-    });
-
-    $('#TableLivreurByCompany').on('change', 'input[type="checkbox"]', function () {
-        let $row = $(this).closest('tr'); // احصل على الصف الحالي
-
-        // الحصول على جميع الـ checkboxات في هذا الصف
-        let $checkboxes = $row.find('input[type="checkbox"]');
-
-        // تحقق كم عددها التي تم تحديدها
-        let checkedCount = $checkboxes.filter(':checked').length;
-
-        // إذا تم اختيار checkboxين في نفس الصف، عرض رسالة
-        if (checkedCount === 2) {
-            //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
-
-            new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même livreur.', {durations: {warning: 5000}});
-            
-            // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
-            $(this).prop('checked', false);
-        }
-    });
-
-    $('#TableProductByCompany').on('change', 'input[type="checkbox"]', function () {
-        let $row = $(this).closest('tr'); // احصل على الصف الحالي
-
-        // الحصول على جميع الـ checkboxات في هذا الصف
-        let $checkboxes = $row.find('input[type="checkbox"]');
-
-        // تحقق كم عددها التي تم تحديدها
-        let checkedCount = $checkboxes.filter(':checked').length;
-
-        // إذا تم اختيار checkboxين في نفس الصف، عرض رسالة
-        if (checkedCount === 2) {
-            //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
-
-            new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même produit.', {durations: {warning: 5000}});
-            
-            // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
-            $(this).prop('checked', false);
-        }
-    });
-
-    $('#SaveClientByCompany').on('click', function (e) 
-    {
+    $('#SaveClientByCompany').on('click', function (e) {
         e.preventDefault();
 
-        let ajouterIds = [];
-        let supprimerIds = [];
+        let idCompany = $('#select-company').val();
+        let role = 'Client';
+        let selectedIds = [];
 
-        $('#TableClientByCompany tbody tr').each(function () 
-        {
-            let row = $(this);
-            let ajouterCheckbox = row.find('input.ajouter');
-            let supprimerCheckbox = row.find('input.supprimer');
-
-            if (ajouterCheckbox.is(':checked') && supprimerCheckbox.is(':checked')) {
-                new AWN().warning("Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.", {durations: {warning: 5000}});
-                ajouterCheckbox.prop('checked', false);
-                supprimerCheckbox.prop('checked', false);
-                return;
-            }
-
-            if (ajouterCheckbox.is(':checked')) {
-                ajouterIds.push(ajouterCheckbox.val());
-            }
-
-            if (supprimerCheckbox.is(':checked')) {
-                supprimerIds.push(supprimerCheckbox.val());
+        $('#TableClientByCompany .toggle-client').each(function () {
+            if ($(this).is(':checked')) {
+                selectedIds.push($(this).val());
             }
         });
 
-        // ✅ التحقق هل لا شيء محدد
-        if (ajouterIds.length === 0 && supprimerIds.length === 0) {
-            new AWN().warning("Veuillez sélectionner au moins un client à ajouter ou à supprimer.", {durations: {warning: 5000}});
+        if (selectedIds.length === 0) {
+            new AWN().warning("Veuillez sélectionner au moins un client à afficher.", { durations: { warning: 5000 } });
             return;
         }
-
-        let idCompany = $("#select-company").val();
 
         $.ajax({
             url: SaveClientByCompany,
@@ -394,19 +319,19 @@ $(document).ready(function () {
             data: {
                 _token: csrf_token,
                 idcompany: idCompany,
-                ajouter: ajouterIds,
-                supprimer: supprimerIds,
-                role: 'Client'
+                selected_ids: selectedIds,
+                role: role
             },
             success: function (response) {
-                new AWN().success('Opération effectuée avec succès !', {durations: {success: 5000}});
+                new AWN().success(response.message || 'Succès !', { durations: { success: 3000 } });
                 location.reload();
             },
             error: function () {
-                new AWN().warning('Erreur lors de la sauvegarde.', {durations: {warning: 5000}});
+                new AWN().warning('Erreur lors de la mise à jour.', { durations: { warning: 5000 } });
             }
         });
     });
+
 
 
 
@@ -414,57 +339,39 @@ $(document).ready(function () {
     {
         e.preventDefault();
 
-        let ajouterIds = [];
-        let supprimerIds = [];
-
-        $('#TableLivreurByCompany tbody tr').each(function () 
-        {
-            let row = $(this);
-            let ajouterCheckbox = row.find('input.ajouter');
-            let supprimerCheckbox = row.find('input.supprimer');
-
-            if (ajouterCheckbox.is(':checked') && supprimerCheckbox.is(':checked')) {
-                new AWN().warning("Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même livreur.", {durations: {warning: 5000}});
-                ajouterCheckbox.prop('checked', false);
-                supprimerCheckbox.prop('checked', false);
-                return;
-            }
-
-            if (ajouterCheckbox.is(':checked')) {
-                ajouterIds.push(ajouterCheckbox.val());
-            }
-
-            if (supprimerCheckbox.is(':checked')) {
-                supprimerIds.push(supprimerCheckbox.val());
+        let idCompany = $('#CompanyLivreur').val();
+        let role = 'Livreur';
+        let selectedIds = [];
+        $('#TableLivreurByCompany .toggle-client').each(function () {
+            if ($(this).is(':checked')) {
+                selectedIds.push($(this).val());
             }
         });
-
-        // ✅ التحقق هل لا شيء محدد
-        if (ajouterIds.length === 0 && supprimerIds.length === 0) {
-            new AWN().warning("Veuillez sélectionner au moins un livreur à ajouter ou à supprimer.", {durations: {warning: 5000}});
+        if (selectedIds.length === 0) {
+            new AWN().warning("Veuillez sélectionner au moins un livreur à afficher.", { durations: { warning: 5000 } });
             return;
         }
 
-        let idCompany = $("#CompanyLivreur").val();
-       
         $.ajax({
             url: SaveLivreurByCompany,
             method: "POST",
             data: {
                 _token: csrf_token,
                 idcompany: idCompany,
-                ajouter: ajouterIds,
-                supprimer: supprimerIds,
-                role: 'Livreur'
+                selected_ids: selectedIds,
+                role: role
             },
             success: function (response) {
-                new AWN().success('Opération effectuée avec succès !', {durations: {success: 5000}});
+                new AWN().success(response.message || 'Succès !', { durations: { success: 3000 } });
                 location.reload();
             },
             error: function () {
-                new AWN().warning('Erreur lors de la sauvegarde.', {durations: {warning: 5000}});
+                new AWN().warning('Erreur lors de la mise à jour.', { durations: { warning: 5000 } });
             }
         });
+       
+
+        
     });
 
 
@@ -473,39 +380,20 @@ $(document).ready(function () {
     $('#SaveProductByCompany').on('click', function (e) 
     {
         e.preventDefault();
+        e.preventDefault();
 
-        let ajouterIds = [];
-        let supprimerIds = [];
-
-        $('#TableProductByCompany tbody tr').each(function () 
-        {
-            let row = $(this);
-            let ajouterCheckbox = row.find('input.ajouter');
-            let supprimerCheckbox = row.find('input.supprimer');
-
-            if (ajouterCheckbox.is(':checked') && supprimerCheckbox.is(':checked')) {
-                new AWN().warning("Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même produit.", {durations: {warning: 5000}});
-                ajouterCheckbox.prop('checked', false);
-                supprimerCheckbox.prop('checked', false);
-                return;
-            }
-
-            if (ajouterCheckbox.is(':checked')) {
-                ajouterIds.push(ajouterCheckbox.val());
-            }
-
-            if (supprimerCheckbox.is(':checked')) {
-                supprimerIds.push(supprimerCheckbox.val());
+        let idCompany = $('#CompanyProduct').val();
+        let role = 'Product';
+        let selectedIds = [];
+        $('#TableProductByCompany .toggle-client').each(function () {
+            if ($(this).is(':checked')) {
+                selectedIds.push($(this).val());
             }
         });
-
-        // ✅ التحقق هل لا شيء محدد
-        if (ajouterIds.length === 0 && supprimerIds.length === 0) {
-            new AWN().warning("Veuillez sélectionner au moins un produit à ajouter ou à supprimer.", {durations: {warning: 5000}});
+        if (selectedIds.length === 0) {
+            new AWN().warning("Veuillez sélectionner au moins un produit à afficher.", { durations: { warning: 5000 } });
             return;
         }
-
-        let idCompany = $("#CompanyProduct").val();
 
         $.ajax({
             url: SaveProductByCompany,
@@ -513,18 +401,18 @@ $(document).ready(function () {
             data: {
                 _token: csrf_token,
                 idcompany: idCompany,
-                ajouter: ajouterIds,
-                supprimer: supprimerIds,
-                role: 'Product'
+                selected_ids: selectedIds,
+                role: role
             },
             success: function (response) {
-                new AWN().success('Opération effectuée avec succès !', {durations: {success: 5000}});
+                new AWN().success(response.message || 'Succès !', { durations: { success: 3000 } });
                 location.reload();
             },
             error: function () {
-                new AWN().warning('Erreur lors de la sauvegarde.', {durations: {warning: 5000}});
+                new AWN().warning('Erreur lors de la mise à jour.', { durations: { warning: 5000 } });
             }
         });
+        
     });
 
 
@@ -541,16 +429,45 @@ $(document).ready(function () {
                     $('#select-company').val(response.IdCompany).change();
                     let clientIds = response.DataClient.map(item => item.idpermission);
                     $('#TableClientByCompany tbody tr').each(function () {
-                        let checkboxValue = $(this).find('.ajouter').val();
+                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
                         if (clientIds.includes(parseInt(checkboxValue))) {
-                            $(this).find('.ajouter').prop('checked', true);
+                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
                         } else {
-                            $(this).find('.ajouter').prop('checked', false);
+                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
                         }
                     });
                 }
             }
         }); 
+    });
+
+    $('#select-company').on('change',function(e)
+    {
+        e.preventDefault();
+        let idcompany = $(this).val();
+        $.ajax({
+            type: "get",
+            url: DisplayClientBycompany,
+            data:
+            {
+                idcompany : idcompany,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    
+                    let clientIds = response.DataClient.map(item => item.idpermission);
+                    $('#TableClientByCompany tbody tr').each(function () {
+                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
+                        if (clientIds.includes(parseInt(checkboxValue))) {
+                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
+                        } else {
+                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
+                        }
+                    });
+                }
+            }
+        });
     });
 
     $('#BtnDisplayLivreur').on('click',function(e)
@@ -566,11 +483,40 @@ $(document).ready(function () {
                     $('#CompanyLivreur').val(response.IdCompany).change();
                     let LivreurIds = response.DataLivreur.map(item => item.idpermission);
                     $('#TableLivreurByCompany tbody tr').each(function () {
-                        let checkboxValue = $(this).find('.ajouter').val();
+                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
                         if (LivreurIds.includes(parseInt(checkboxValue))) {
-                            $(this).find('.ajouter').prop('checked', true);
+                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
                         } else {
-                            $(this).find('.ajouter').prop('checked', false);
+                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    $('#CompanyLivreur').on('change',function(e)
+    {
+        e.preventDefault();
+        let idcompany = $(this).val();
+        $.ajax({
+            type: "get",
+            url: DisplayLivreurBycompany,
+            data:
+            {
+                idcompany : idcompany,
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 200) {
+                    //$('#CompanyLivreur').val(response.IdCompany).change();
+                    let LivreurIds = response.DataLivreur.map(item => item.idpermission);
+                    $('#TableLivreurByCompany tbody tr').each(function () {
+                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
+                        if (LivreurIds.includes(parseInt(checkboxValue))) {
+                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
+                        } else {
+                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
                         }
                     });
                 }
@@ -592,16 +538,151 @@ $(document).ready(function () {
                     $('#CompanyProduct').val(response.IdCompany).change();
                     let ProductIds = response.DataProduct.map(item => item.idpermission);
                     $('#TableProductByCompany tbody tr').each(function () {
-                        let checkboxValue = $(this).find('.ajouter').val();
+                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
                         if (ProductIds.includes(parseInt(checkboxValue))) {
-                            $(this).find('.ajouter').prop('checked', true);
+                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
                         } else {
-                            $(this).find('.ajouter').prop('checked', false);
+                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
                         }
                     });
                 }
             }
         });
+    });
+
+    $('#CompanyProduct').on('change',function(e)
+    {
+       e.preventDefault(); 
+       idcompany = $(this).val();
+       $.ajax({
+        type: "get",
+        url: DisplayProductBycompany,
+        data:
+            {
+                idcompany : idcompany,
+            },
+        dataType: "json",
+        success: function (response) {
+                if (response.status == 200) {
+                    //$('#CompanyLivreur').val(response.IdCompany).change();
+                    let ProductIds = response.DataProduct.map(item => item.idpermission);
+                    $('#TableProductByCompany tbody tr').each(function () {
+                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
+                        if (ProductIds.includes(parseInt(checkboxValue))) {
+                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
+                        } else {
+                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
+                        }
+                    });
+                }
+            }
+       });
+    });
+
+    $('#TableClientByCompany').on('change', '.ajouterAndSupprimer', function (e) {
+        e.preventDefault();
+
+        let checkbox = $(this); // save reference to this checkbox
+        let itemID = checkbox.val();
+        let isChecked = checkbox.is(':checked') ? 1 : 0;
+        let IDCompany = $('#select-company').val();
+        
+        
+        if (isChecked == 0) {
+            $.ajax({
+                type: "get",
+                url: CheckClientCanDelete, // make sure this variable is defined
+                data: {
+                    itemID: itemID,
+                    isChecked: isChecked,
+                    IdCompany: IDCompany,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 404) {
+                        new AWN().warning(response.message, { durations: { warning: 5000 } });
+
+                        // 🔴 Uncheck the checkbox again
+                        checkbox.prop('checked', true);
+                    }
+                },
+                error: function (xhr) {
+                    console.error('AJAX error:', xhr.responseText);
+                    checkbox.prop('checked', false); // Optionally uncheck on error too
+                }
+            });
+        }
+    });
+
+
+
+    $('#TableLivreurByCompany').on('change', '.ajouterAndSupprimer', function (e) {
+        e.preventDefault();
+
+        let checkbox = $(this); // save reference to this checkbox
+        let itemID = checkbox.val();
+        let isChecked = checkbox.is(':checked') ? 1 : 0;
+        let IDCompany = $('#select-company').val();
+        
+        
+        if (isChecked == 0) {
+            $.ajax({
+                type: "get",
+                url: CheckLivreurCanDelete, // make sure this variable is defined
+                data: {
+                    itemID: itemID,
+                    isChecked: isChecked,
+                    IdCompany: IDCompany,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 404) {
+                        new AWN().warning(response.message, { durations: { warning: 5000 } });
+
+                        // 🔴 Uncheck the checkbox again
+                        checkbox.prop('checked', true);
+                    }
+                },
+                error: function (xhr) {
+                    console.error('AJAX error:', xhr.responseText);
+                    checkbox.prop('checked', false); // Optionally uncheck on error too
+                }
+            });
+        }
+    });
+
+    $('#TableProductByCompany').on('change','.ajouterAndSupprimer',function(e)
+    {
+        e.preventDefault();
+        let checkbox = $(this); // save reference to this checkbox
+        let itemID = checkbox.val();
+        let isChecked = checkbox.is(':checked') ? 1 : 0;
+        let IDCompany = $('#CompanyProduct').val();
+
+        if (isChecked == 0) {
+            $.ajax({
+                type: "get",
+                url: CheckProductCanDelete, // make sure this variable is defined
+                data: {
+                    itemID: itemID,
+                    isChecked: isChecked,
+                    IdCompany: IDCompany,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.status == 404) {
+                        new AWN().warning(response.message, { durations: { warning: 5000 } });
+
+                        // 🔴 Uncheck the checkbox again
+                        checkbox.prop('checked', true);
+                    }
+                },
+                error: function (xhr) {
+                    console.error('AJAX error:', xhr.responseText);
+                    checkbox.prop('checked', false); // Optionally uncheck on error too
+                }
+            });
+        }
     });
 
     

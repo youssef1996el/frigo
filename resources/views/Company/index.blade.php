@@ -14,6 +14,9 @@
     var DisplayClientBycompany          = "{{url('DisplayClientBycompany')}}";
     var DisplayLivreurBycompany         = "{{url('DisplayLivreurBycompany')}}";
     var DisplayProductBycompany         = "{{url('DisplayProductBycompany')}}";
+    var CheckClientCanDelete            = "{{url('CheckClientCanDelete')}}";
+    var CheckLivreurCanDelete            = "{{url('CheckLivreurCanDelete')}}";
+    var CheckProductCanDelete            = "{{url('CheckProductCanDelete')}}";
 
 </script>
 <style>
@@ -52,7 +55,7 @@
                                 <button class="btn btn-primary"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCompany">Ajoute compagnie</button>
                                 <button class="btn bg-primary-subtle"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient">Accorder le client à compagnie</button>
                                 <button class="btn btn-info"           style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalLivreurByCompany" id="BtnDisplayLivreur">Accorder le livreur à compagnie</button>
-                                <button class="btn btn-secondary"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button
+                                <button class="btn btn-secondary"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button>
                                 <a href="{{url('Setting')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
                                 <a href="{{url('home')}}" class="btn btn-primary float-end"         style="margin-right: 5px" >Page d'accueil</a>
                             </div>
@@ -172,52 +175,46 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                         <div class="modal-body">
-                            <div class="pt-0">
-                                
-                                
-                                <ul class="ValidationAddCompany"></ul>
-                                <div class="form-group mb-3 password-container">
-                                    <label for="password" class="form-label">Nom compagnie</label>
-                                    <select name="idcompany" id="select-company" class="form-select">
-                                        @foreach ($ListCompany as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <input type="text" name="role" value="Client" hidden>
-                                </div>
-                                <table class="table table-responsive table-bordered" id="TableClientByCompany">
-                                    <thead>
-                                        <tr >
-                                            <th>Clients</th>
-                                            <th class="text-center">Ajouter</th>
-                                            <th class="text-center">Supprimer</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($Clients as $item)
-                                            <tr>
-                                                <td>{{$item->firstname . ' ' . $item->lastname}}</td>
-                                                <td>
-                                                    <div class="form-check d-flex justify-content-center">
-                                                        <input class="form-check-input ajouter" type="checkbox" value="{{$item->id}}" name="ajouter[]" />
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="form-check d-flex justify-content-center">
-                                                        <input class="form-check-input supprimer" type="checkbox" value="{{$item->id}}" name="supprimer[]" />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                
+                        <div class="pt-0">
+                            <ul class="ValidationAddCompany"></ul>
+
+                            {{-- Select Company --}}
+                            <div class="form-group mb-3">
+                                <label for="select-company" class="form-label">Nom compagnie</label>
+                                <select name="idcompany" id="select-company" class="form-select">
+                                    @foreach ($ListCompany as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="role" value="Client">
                             </div>
+
+                            {{-- Clients Table --}}
+                            <table class="table table-responsive table-bordered" id="TableClientByCompany">
+                                <thead>
+                                    <tr>
+                                        <th>Clients</th>
+                                        <th class="text-center">Afficher</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($Clients as $item)
+                                        <tr>
+                                            <td>{{ $item->firstname . ' ' . $item->lastname }}</td>
+                                            <td class="text-center">
+                                                <input type="checkbox" class="toggle-client ajouterAndSupprimer" value="{{ $item->id }}">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
-                            <button type="button" class="btn btn-primary" id="SaveClientByCompany">Sauvegarder</button>
-                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ferme</button>
+                        <button type="button" class="btn btn-primary" id="SaveClientByCompany">Sauvegarder</button>
+                    </div>
                     
                 </div>
             </div>
@@ -251,8 +248,8 @@
                                 <thead>
                                     <tr >
                                         <th>Livreur</th>
-                                        <th class="text-center">Ajouter</th>
-                                        <th class="text-center">Supprimer</th>
+                                        <th class="text-center">Afficher</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -261,14 +258,10 @@
                                             <td>{{$item->name}}</td>
                                             <td>
                                                 <div class="form-check d-flex justify-content-center">
-                                                    <input class="form-check-input ajouter" type="checkbox" value="{{$item->id}}" name="ajouter[]" />
+                                                    <input class="toggle-client ajouterAndSupprimer" type="checkbox" value="{{$item->id}}"  />
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="form-check d-flex justify-content-center">
-                                                    <input class="form-check-input supprimer" type="checkbox" value="{{$item->id}}" name="supprimer[]" />
-                                                </div>
-                                            </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -311,22 +304,16 @@
                                 <thead>
                                     <tr >
                                         <th>Produit</th>
-                                        <th class="text-center">Ajouter</th>
-                                        <th class="text-center">Supprimer</th>
+                                        <th class="text-center">Afficher</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($Products as $item)
-                                        <tr>
+                                         <tr>
                                             <td>{{$item->name}}</td>
                                             <td>
                                                 <div class="form-check d-flex justify-content-center">
-                                                    <input class="form-check-input ajouter" type="checkbox" value="{{$item->id}}" name="ajouter[]" />
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-check d-flex justify-content-center">
-                                                    <input class="form-check-input supprimer" type="checkbox" value="{{$item->id}}" name="supprimer[]" />
+                                                    <input class="toggle-client ajouterAndSupprimer" type="checkbox" value="{{$item->id}}"  />
                                                 </div>
                                             </td>
                                         </tr>
