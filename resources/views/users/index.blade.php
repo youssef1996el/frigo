@@ -56,27 +56,37 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    <form action="{{ route('users.destroy', $user->id) }}" method="post">
+                                    <form action="{{ route('users.destroy', $user->id) }}" method="post" class="d-flex justify-content-center">
                                         @csrf
                                         @method('DELETE')
 
                                         @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
                                             @if (Auth::user()->hasRole('Super Admin'))
-                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Modifier</a>
+                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm m-1">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    Modifier
+                                                </a>
                                             @endif
                                         @else
                                             @can('edit-user')
-                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Modifier</a>   
+                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm m-1">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                     Modifier
+                                                </a>   
                                             @endcan
 
                                             @can('delete-user')
                                                 @if (Auth::user()->id!=$user->id)
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete this user?');"><i class="bi bi-trash"></i> Supprimer</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm m-1" onclick="return confirm('Do you want to delete this user?');">
+                                                        <i class="bi bi-trash"></i>
+                                                        Supprimer
+                                                    </button>
                                                 @endif
                                             @endcan
                                         @endif
-
+                                        <a href="{{url('user_permission/'. $user->id)}}" class="btn btn-secondary btn-sm m-1">Autorisation</a>
                                     </form>
+                                    
                                 </td>
                             </tr>
                             @empty

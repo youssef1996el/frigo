@@ -19,10 +19,12 @@ use Mpdf\Mpdf;
 use Carbon\Carbon;
 use App\Models\Print_Marchandise_Entre;
 use App\Models\Info;
+use App\Models\User;
 class MarchandiseEntreeController extends Controller
 {
     public function index(Request $request)
     {
+        
         $checkHasCompany = Company::count();
         if( $checkHasCompany == 0)
         {
@@ -46,12 +48,12 @@ class MarchandiseEntreeController extends Controller
         {
             return view("Error.index")->withErrors('tu n\'as pas de produit ');
         }
-        $checkHasCaisseVide = CaisseVide::count();
-
+         $checkHasCaisseVide = CaisseVide::count();
+       /*  dd($checkHasCaisseVide);
         if( $checkHasCaisseVide == 0)
         {
             return view("Error.index")->withErrors('tu n\'as pas de caisse de vide ');
-        }
+        }  */
 
 
 
@@ -59,7 +61,7 @@ class MarchandiseEntreeController extends Controller
         // get id company is status = 1 
         $IdCompany       = Company::where('status',$CompanyIsActive)->value('id');
 
-        $checkHasCaisseVides = DB::table('caissevides as c')
+       /*  $checkHasCaisseVides = DB::table('caissevides as c')
         ->join('companys as co','co.id','=','c.idcompany')
         ->where('c.idcompany',$IdCompany)
         ->count();
@@ -67,7 +69,7 @@ class MarchandiseEntreeController extends Controller
         if($checkHasCaisseVides == 0)
         {
             return view("Error.index")->withErrors('tu n\'as pas de caisses de vides ');
-        }
+        } */
         $CompanyIsActive = Company::where('status',1)->value('name');
         $Clients = DB::table('companys as c')
         ->join('display_with_company as d', 'd.idcompany', '=', 'c.id')
@@ -118,6 +120,7 @@ class MarchandiseEntreeController extends Controller
                     'm.id',
                     'm.clotuer',
                     'm.type',
+                    'u.id as user_id',
                     DB::raw('IFNULL(lm.total_lignes, 0) as total_lignes')
                 )
                 ->orderBy('m.id', 'desc')
@@ -152,8 +155,8 @@ class MarchandiseEntreeController extends Controller
                                 <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
                             </a>';
                 }
-                
-                if(!$row->clotuer)
+                $rowUser = User::find($row->user_id);
+                if ($rowUser && $rowUser->hasPermissionTo('delete-item')) 
                 {
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseEntree"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
@@ -653,7 +656,7 @@ class MarchandiseEntreeController extends Controller
             'idmarchandise_entree'     =>null,
             'idcompany'        => $IdCompany,
         ]);
-        return redirect('Setting');
+        return redirect('Bons')->with('success', 'Le bon a été enregistré avec succès.');
     }
 
     public function destroy(Request $request) 

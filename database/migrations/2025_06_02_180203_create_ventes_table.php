@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('number_box')->nullable();
             $table->integer('achteur')->nullable();
-            $table->integer('vendeur')->nullable();
-            $table->foreignId('idlivreur')->references('id')->on('livreurs')->onDelete('cascade');
+            $table->integer('vendeur')->nullable(); 
+            $table->foreignId('idproduct')->references('id')->on('list_origins')->onDelete('cascade');
             $table->foreignId('idcompany')->references('id')->on('companys')->onDelete('cascade');
             $table->foreignId('iduser')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

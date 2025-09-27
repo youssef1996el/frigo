@@ -15,6 +15,7 @@ use Mpdf\Mpdf;
 use App\Models\Print_Caisse_Retour;
 use App\Models\Info;
 use Carbon\Carbon;
+use App\Models\User;
 class RetourCaisseController extends Controller
 {
      public function index(Request $request)
@@ -49,26 +50,16 @@ class RetourCaisseController extends Controller
                                 ->where('com.id'       ,'='    ,$IdCompany)
                                 ->select(
                                     'c.*','u.name',DB::raw('concat(co.firstname, " ", co.lastname) as client_name'),
-                                    'l.cin','l.matricule','l.name as namelivreur','co.id as idcustomer','l.id as idDelivery'
+                                    'l.cin','l.matricule','l.name as namelivreur','co.id as idcustomer','l.id as idDelivery','u.id as user_id',
                                 )->orderByDesc('c.id');
 
             return DataTables::of($Data_Caisse_Vide)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $user = auth()->user();
+                    
                     $btn = '';
 
-                // زر التعديل (تحقق من الصلاحية)
-                /* if ($user && $user->can('company-modifier')) { */
-                /* $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCaisseRetour" 
-                            data-id="' . $row->id . '"  
-                            title="Modifier caisse de vide" 
-                            data-client="' . $row->idcustomer . '" 
-                            data-livreur="' . $row->idDelivery . '">
-                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                        </a>'; */
-    
-                /* } */
+                
 
                 $btn .= '<a href="' . url("PrintCaisseRetour/" . $row->id) . '"   class="btn btn-sm bg-warning-subtle me-1 " 
                             data-id="' . $row->id . '"  
@@ -88,7 +79,9 @@ class RetourCaisseController extends Controller
                 
     
 
-                if(!$row->clotuer)
+                $rowUser = User::find($row->user_id);
+                 // زر الحذف، فقط إذا المستخدم لديه صلاحية 'delete-item' و الصف غير مغلق
+                if ($rowUser && $rowUser->hasPermissionTo('delete-item'))
                 {
                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseRetour"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
@@ -473,6 +466,6 @@ class RetourCaisseController extends Controller
             'idcaisseretour'     =>null,
             'idcompany'        => $IdCompany,
         ]);
-        return redirect('Setting');
+        return redirect('Bons')->with('success', 'Le bon a été enregistré avec succès.');
     }
 }

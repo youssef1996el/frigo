@@ -19,7 +19,7 @@ class UpdateUserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    /* public function rules(): array
     {
         return [
             'name' => 'required|string|max:250',
@@ -27,5 +27,17 @@ class UpdateUserRequest extends FormRequest
             'password' => 'nullable|string|min:8|confirmed',
             'roles' => 'required'
         ];
-    }
+    } */
+  /*  public function rules(): array
+    {
+        // جلب الـ user من الـ route parameter
+        $userId = $this->route('id'); // اسم البارامتر في route: user_permission/{id}/update
+
+        return [
+            'name' => 'required|string|max:250',
+            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email,' . $userId,
+            'password' => 'nullable|string|min:8|confirmed',
+            'roles' => 'required'
+        ];
+    } */
 }

@@ -19,6 +19,7 @@ use Mpdf\Mpdf;
 use Carbon\Carbon;
 use App\Models\Print_Marchandise_Sortie;
 use App\Models\Info;
+use App\Models\User;
 class MarchandiseSortieController extends Controller
 {
     public function index(Request $request)
@@ -51,14 +52,14 @@ class MarchandiseSortieController extends Controller
         $CompanyIsActive = Company::where('status', 1)->value('status');
         $IdCompany = Company::where('status', $CompanyIsActive)->value('id');
 
-        $checkHasCaisseVides = DB::table('caissevides as c')
+        /* $checkHasCaisseVides = DB::table('caissevides as c')
             ->join('companys as co', 'co.id', '=', 'c.idcompany')
             ->where('c.idcompany', $IdCompany)
             ->count();
 
         if ($checkHasCaisseVides == 0) {
             return view("Error.index")->withErrors("tu n'as pas de caisses de vides");
-        }
+        } */
 
         $CompanyIsActive = Company::where('status', 1)->value('name');
         //$Clients = Client::all();
@@ -112,6 +113,7 @@ class MarchandiseSortieController extends Controller
                     'u.name as created',
                     'm.id',
                     'm.clotuer',
+                    'u.id as user_id',
                     DB::raw('IFNULL(lm.total_lignes, 0) as total_lignes')
                 )
                 ->orderBy('m.id', 'desc')
@@ -144,7 +146,8 @@ class MarchandiseSortieController extends Controller
                                     <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
                                 </a>';
                     }
-                    if(!$row->clotuer)
+                    $rowUser = User::find($row->user_id);
+                    if ($rowUser && $rowUser->hasPermissionTo('delete-item')) 
                     {
                         $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseSortie"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
@@ -179,7 +182,7 @@ class MarchandiseSortieController extends Controller
             'idmarchandise_sortie'     =>null,
             'idcompany'        => $IdCompany,
         ]);
-        return redirect('Setting');
+        return redirect('Bons')->with('success', 'Le bon a été enregistré avec succès.');
     }
     public function GetTmpMarchandiseSortieByUser(Request $request)
     {

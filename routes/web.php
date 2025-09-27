@@ -207,6 +207,11 @@ Route::group(['middleware' => ['web','auth']], function ()
     Route::post('UpdateComptabilite'                    ,[ComptabiliteController::class,'Update'                ]);
     /**************************************************** End Comptabilite *************************************************/
 
+
+
+    /****************************************************** Permission *******************************************************/
+    Route::get('user_permission/{id}' ,                      [UserController::class,'getAllPermissionforUser']);
+    Route::post('user_permission/{id}'              , [UserController::class, 'updateUserPermissions']);
     
     
 });

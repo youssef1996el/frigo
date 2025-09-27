@@ -23,12 +23,16 @@ class PermissionSeeder extends Seeder
             'view-product',
             'create-product',
             'edit-product',
-            'delete-product'
+            'delete-product',
+            'delete-item'
          ];
  
           // Looping and Inserting Array's Permissions into Permission Table
-         foreach ($permissions as $permission) {
+         /* foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
-          }
+          } */
+         foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
     }
 }

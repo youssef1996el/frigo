@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Company;
+use Spatie\Permission\Models\Permission;
 class UserController extends Controller
 {
     /**
@@ -31,7 +32,7 @@ class UserController extends Controller
     {
         $CompanyIsActive = Company::where('status',1)->value('name');
         return view('users.index', [
-            'users' => User::latest('id')->paginate(3),
+            'users' => User::latest('id')->paginate(10),
             'company' => $CompanyIsActive,
         ]);
     }
@@ -128,5 +129,26 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')
                 ->withSuccess('User is deleted successfully.');
+    }
+
+    public function getAllPermissionforUser($id)
+    {
+        $user = User::findOrFail($id);
+        $permissions = Permission::all()->groupBy(function($perm) {
+            return explode(' ', $perm->name)[0]; // group by first word (مثلاً "client create" => group "client")
+        });
+        $CompanyIsActive = Company::where('status',1)->value('name');
+        return view('users.permissions_edit')->with('user',$user)->with('permissions',$permissions)->with('company',$CompanyIsActive);
+         /* compact('user', 'permissions')); */
+    }
+
+    public function updateUserPermissions(UpdateUserRequest $request, $id):RedirectResponse
+    {
+        
+        $user = User::findOrFail($id);
+
+        $user->syncPermissions($request->permissions ?? []);
+
+        return redirect()->back()->with('success', 'Les autorisations ont été mises à jour avec succès!');
     }
 }

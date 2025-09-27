@@ -53,7 +53,7 @@
                         <div class="card-body">
                             <div class=" mb-3">
                                 <button class="btn btn-primary"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCompany">Ajoute compagnie</button>
-                                <button class="btn bg-primary-subtle"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient">Accorder le client à compagnie</button>
+                                <button class="btn bg-primary-subtle"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient1">Accorder le client à compagnie</button>
                                 <button class="btn btn-info"           style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalLivreurByCompany" id="BtnDisplayLivreur">Accorder le livreur à compagnie</button>
                                 <button class="btn btn-secondary"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button>
                                 <a href="{{url('Setting')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>

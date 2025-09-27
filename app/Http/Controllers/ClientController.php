@@ -67,7 +67,7 @@ class ClientController extends Controller
                                 <i class="mdi mdi-id-card fs-14 text-primary"></i>
                             </a>';
 
-                    $btn .= '<a href="' . url("FicheClient/" . $row->id) . '" class="btn btn-sm bg-info-subtle me-1"  target="_blank"  "
+                    $btn .= '<a href="' . url("FicheClient/" . $row->id) . '" class="btn btn-sm bg-info-subtle me-1"    "
                                 data-id="' . $row->id . '"  
                                 title="Afficher le fiche client">
                                 <i class="mdi mdi-list-box fs-14 text-primary"></i>

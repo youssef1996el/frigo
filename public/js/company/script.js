@@ -10,9 +10,7 @@ $(document).ready(function () {
 
     $(function ()
     {
-        /* if ($.fn.DataTable.isDataTable(selector)) {
-            $(selector).DataTable().destroy();
-        } */
+        
         initializeDataTable('.Table_Company', company);
         function initializeDataTable(selector, url)
         {
@@ -82,66 +80,7 @@ $(document).ready(function () {
 
             });
 
-            /* $(selector + ' tbody').on('click', '.trash', function(e)
-            {
-                e.preventDefault();
-                var IdCharge  = $(this).attr('value');
-                swal({
-                    title: "es-tu sûr de supprimer cette charge",
-                    text: "Une fois supprimée, vous ne pourrez plus récupérer cette charge !",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                    if (willDelete)
-                    {
-                        var data =
-                        {
-                            'id'         : IdCharge,
-                            '_token'     : csrf_token,
-                        };
-                        $.ajax({
-                            type: "post",
-                            url: TrashCharge,
-                            data: data,
-
-                            dataType: "json",
-                            success: function (response)
-                            {
-                                if(response.status == 200)
-                                {
-                                    swal("Votre charge a été supprimée !", {
-                                        icon: "success",
-                                    });
-                                    $('.TableCharge').DataTable().ajax.reload();
-                                }
-                                else if(response.status ==400)
-                                {
-                                    swal("Oops !", response.message, "error");
-                                }
-                                else if(response.status ==404)
-                                {
-                                    swal("Oops !", response.message, "error");
-                                }
-                            }
-                        });
-
-                    }
-                    else
-                    {
-                        swal("Votre charge est sécurisée !");
-                    }
-                    });
-            });
-
-            $(selector + ' tbody').on('click', '.ChangeDate', function(e)
-            {
-                e.preventDefault();
-                var idcharge = $(this).attr('value');
-                $('#idCharge').val(idcharge);
-                $('#ModelChargeEditDate').modal('show');
-            }); */
+           
 
         }
     });
@@ -296,7 +235,7 @@ $(document).ready(function () {
     
 
 
-    $('#SaveClientByCompany').on('click', function (e) {
+    /* $('#SaveClientByCompany').on('click', function (e) {
 
         // تحقق كم عددها التي تم تحديدها
         let checkedCount = $checkboxes.filter(':checked').length;
@@ -310,7 +249,7 @@ $(document).ready(function () {
             // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
             $(this).prop('checked', false);
         }
-    });
+    }); */
 
     $('#TableLivreurByCompany').on('change', 'input[type="checkbox"]', function () {
         let $row = $(this).closest('tr'); // احصل على الصف الحالي
@@ -418,78 +357,51 @@ $(document).ready(function () {
 
 
 
-    $('#SaveLivreurByCompany').on('click', function (e) 
-    {
-        e.preventDefault();
+    $('#SaveLivreurByCompany').on('click', function (e) {
+    e.preventDefault();
 
-        let idCompany = $('#CompanyLivreur').val();
-        let role = 'Livreur';
-        let selectedIds = [];
-        $('#TableLivreurByCompany .toggle-client').each(function () {
-            if ($(this).is(':checked')) {
-                selectedIds.push($(this).val());
-            }
-        });
-    });
-    $('#SaveLivreurByCompany').on('click', function (e)
-    {
-        e.preventDefault();
+    let idCompany = $('#CompanyLivreur').val();
+    let role = 'Livreur';
+    let selectedIds = [];
 
-        let ajouterIds = [];
-        let supprimerIds = [];
-
-        $('#TableLivreurByCompany tbody tr').each(function ()
-        {
-            let row = $(this);
-            let ajouterCheckbox = row.find('input.ajouter');
-            let supprimerCheckbox = row.find('input.supprimer');
-
-            if (ajouterCheckbox.is(':checked') && supprimerCheckbox.is(':checked')) {
-                new AWN().warning("Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même livreur.", {durations: {warning: 5000}});
-                ajouterCheckbox.prop('checked', false);
-                supprimerCheckbox.prop('checked', false);
-                return;
-            }
-
-            if (ajouterCheckbox.is(':checked')) {
-                ajouterIds.push(ajouterCheckbox.val());
-            }
-
-            if (supprimerCheckbox.is(':checked')) {
-                supprimerIds.push(supprimerCheckbox.val());
-
-            }
-        });
-        if (selectedIds.length === 0) {
-            new AWN().warning("Veuillez sélectionner au moins un livreur à afficher.", { durations: { warning: 5000 } });
-            return;
+    // Loop through checkboxes and collect checked IDs
+    $('#TableLivreurByCompany .toggle-client').each(function () {
+        if ($(this).is(':checked')) {
+            selectedIds.push($(this).val());
         }
-
-
-        let idCompany = $("#CompanyLivreur").val();
-
-
-        $.ajax({
-            url: SaveLivreurByCompany,
-            method: "POST",
-            data: {
-                _token: csrf_token,
-                idcompany: idCompany,
-                selected_ids: selectedIds,
-                role: role
-            },
-            success: function (response) {
-                new AWN().success(response.message || 'Succès !', { durations: { success: 3000 } });
-                location.reload();
-            },
-            error: function () {
-                new AWN().warning('Erreur lors de la mise à jour.', { durations: { warning: 5000 } });
-            }
-        });
-       
-
-        
     });
+
+    if (selectedIds.length === 0) {
+        new AWN().warning("Veuillez sélectionner au moins un livreur à afficher.", {
+            durations: { warning: 5000 }
+        });
+        return;
+    }
+
+    // AJAX call
+    $.ajax({
+        url: SaveLivreurByCompany,
+        method: "POST",
+        data: {
+            _token: csrf_token,
+            idcompany: idCompany,
+            selected_ids: selectedIds,
+            role: role
+        },
+        success: function (response) {
+            new AWN().success(response.message || 'Succès !', {
+                durations: { success: 3000 }
+            });
+            location.reload();
+        },
+        error: function () {
+            new AWN().warning('Erreur lors de la mise à jour.', {
+                durations: { warning: 5000 }
+            });
+        }
+    });
+});
+
 
 
 
@@ -508,7 +420,7 @@ $(document).ready(function () {
                 selectedIds.push($(this).val());
             }
 
-
+        });
         let ajouterIds = [];
         let supprimerIds = [];
 
@@ -560,8 +472,9 @@ $(document).ready(function () {
     });
 
 
-    $('#BtnDisplayClient').on('click',function(e)
+    $('#BtnDisplayClient1').on('click',function(e)
     {
+       
         e.preventDefault();
         $.ajax({
             type: "get",
@@ -570,6 +483,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
+                    //console.log(response.DataClient);
                     $('#select-company').val(response.IdCompany).change();
                     let clientIds = response.DataClient.map(item => item.idpermission);
                     $('#TableClientByCompany tbody tr').each(function () {
@@ -931,4 +845,4 @@ $(document).ready(function () {
 
 
 });
-});
+

@@ -31,7 +31,11 @@
                     </div>
                 </div>
             </div>
-
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="card mt-5 p-2 ">
                 <div class="row w-100 ">
                 

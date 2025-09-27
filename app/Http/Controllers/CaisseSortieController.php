@@ -12,6 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Print_Caisse_Vides;
+use App\Models\User;
 class CaisseSortieController extends Controller
 {
     //
@@ -47,61 +48,46 @@ class CaisseSortieController extends Controller
                                 ->where('com.id'       ,'='    ,$IdCompany)
                                 ->select(
                                     'c.*','u.name',DB::raw('concat(co.firstname, " ", co.lastname) as client_name'),
-                                    'l.cin','l.matricule','l.name as namelivreur','co.id as idcustomer','l.id as idDelivery'
+                                    'l.cin','l.matricule','l.name as namelivreur','co.id as idcustomer','l.id as idDelivery','u.id as user_id'
                                 )->orderByDesc('c.id');
 
             return DataTables::of($Data_Caisse_Vide)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $user = auth()->user();
-                    $btn = '';
+    ->addIndexColumn()
+    ->addColumn('action', function ($row) {
+        // المستخدم الحالي
+        $btn = '';
 
-                // زر التعديل (تحقق من الصلاحية)
-                /* if ($user && $user->can('company-modifier')) { */
-               /*  $btn .= '<a href="#" class="btn btn-sm bg-primary-subtle me-1 editCaisseVide" 
-                            data-id="' . $row->id . '"  
-                            title="Modifier caisse de vide" 
-                            data-client="' . $row->idcustomer . '" 
-                            data-livreur="' . $row->idDelivery . '">
-                            <i class="mdi mdi-pencil-outline fs-14 text-primary"></i>
-                        </a>'; */
-    
-                /* } */
+        // زر الطباعة
+        $btn .= '<a href="' . url("PrintCaisseVide/" . $row->id) . '" class="btn btn-sm bg-warning-subtle me-1" 
+                    data-id="' . $row->id . '"  
+                    title="Imprimer cette bon sortie" 
+                    data-client="' . $row->idcustomer . '" 
+                    data-livreur="' . $row->idDelivery . '"
+                    onclick="setTimeout(function(){ window.location.reload(); }, 1000)">
+                    <i class="mdi mdi-printer fs-14 text-warning"></i>
+                 </a>';
 
-                $btn .= '<a href="' . url("PrintCaisseVide/" . $row->id) . '"   class="btn btn-sm bg-warning-subtle me-1 " 
-                            data-id="' . $row->id . '"  
-                            title="Imprimer cette bon sortie" 
-                            data-client="' . $row->idcustomer . '" 
-                            data-livreur="' . $row->idDelivery . '"
-                            onclick="setTimeout(function(){ window.location.reload(); }, 1000)">
-                            <i class="mdi mdi-printer fs-14 text-warning"></i>
-                        </a>';
+        // إذا الكلاوزر مغلق
+        if ($row->clotuer) {
+            $btn .= '<a href="#" target="_blank" class="btn btn-sm bg-info-subtle me-1">
+                        <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
+                     </a>';
+        }
+        $rowUser = User::find($row->user_id);
+        // زر الحذف، فقط إذا المستخدم لديه صلاحية 'delete-item' و الصف غير مغلق
+        if ($rowUser && $rowUser->hasPermissionTo('delete-item')) {
+            $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseVide"
+                        data-id="' . $row->id . '" data-bs-toggle="tooltip" 
+                        title="Supprimer cette bon sortie">
+                        <i class="mdi mdi-delete fs-14 text-danger"></i>
+                     </a>';
+        }
 
-                if($row->clotuer)
-                {
-                    $btn .= '<a href="#"  target="_blank" class="btn btn-sm bg-info-subtle me-1 ">
-                                <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
-                            </a>';
-                }
-                
-    
+        return $btn;
+    })
+    ->rawColumns(['action']) // لتجنب ترميز HTML
+    ->make(true);
 
-                if(!$row->clotuer)
-                {
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseVide"
-                                data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                                title="Supprimer cette bon sortie">
-                                <i class="mdi mdi-delete fs-14 text-danger"></i>
-                            </a>';
-                }
-                /* if ($user && $user->can('company-supprimer')) { */
-                    
-                /* } */
-
-                return $btn;
-            })
-            ->rawColumns(['action']) // تجنب ترميز HTML
-            ->make(true);
 
         }
         $CompanyIsActive = Company::where('status',1)->value('name');
@@ -347,7 +333,7 @@ class CaisseSortieController extends Controller
             'idcaissevide'     =>null,
             'idcompany'        => $IdCompany,
         ]);
-        return redirect('Setting');
+        return redirect('Bons')->with('success', 'Le bon a été enregistré avec succès.');
     }
 
 

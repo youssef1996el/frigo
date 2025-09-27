@@ -166,7 +166,7 @@ class VenteMarchandiseController extends Controller
         $data['iduser'] = Auth::user()->id;
         $data['idcompany'] = $IdCompany;
         
-
+       
        $Vente = Vente::create([
             "number_box"    =>$data['number_box'],
             "achteur"       =>$data['achteur'],
@@ -175,7 +175,7 @@ class VenteMarchandiseController extends Controller
             "idcompany"     =>$data['idcompany'],
             "iduser"        =>$data['iduser'],
         ]);
-       
+        
         // store marchandise sortie
         $marchandise_sortie = marchandise_sortie::create([
             'number_box' => $data['number_box'],
