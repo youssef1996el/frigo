@@ -68,7 +68,7 @@ class CompanyController extends Controller
         
                                         
 
-        return view('company.index')
+        return view('Company.index')
         ->with('company',$CompanyIsActive)
         ->with('Clients',$Clients)
         ->with('Livreurs',$Livreurs)
