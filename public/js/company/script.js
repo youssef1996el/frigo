@@ -476,6 +476,7 @@ $(document).ready(function () {
     {
        
         e.preventDefault();
+        $('#ModalClientByCompany').modal("show");
         $.ajax({
             type: "get",
             url: DisplayClientBycompany,

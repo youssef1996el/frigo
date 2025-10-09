@@ -57,7 +57,7 @@
                                         <button class="btn btn-primary mt-2"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCompany">Ajoute compagnie</button>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-xl-2">
-                                        <button class="btn bg-primary-subtle mt-2"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient1">Accorder le client à compagnie</button>
+                                        <button class="btn bg-primary-subtle mt-2"  style="margin-right: 5px" {{-- data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" --}} id="BtnDisplayClient1">Accorder le client à compagnie</button>
                                     </div>
                                    <div class="col-sm-12 col-md-12 col-xl-2">
                                         <button class="btn btn-info mt-2"           style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalLivreurByCompany" id="BtnDisplayLivreur">Accorder le livreur à compagnie</button>
