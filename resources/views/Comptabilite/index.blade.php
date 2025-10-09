@@ -36,10 +36,29 @@
 
                         <div class="card-body">
                             <div class=" mb-3">
-                                <button class="btn btn-primary"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddComptabilite">Ajoute comptabilité</button>
-                                
-                                <a href="{{url('Setting')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
-                                <a href="{{url('home')}}" class="btn btn-primary float-end"         style="margin-right: 5px" >Page d'accueil</a>
+                                <div class="row g-2 align-items-center">
+                                    <!-- Button: Ajoute comptabilité -->
+                                    <div class="col-12 col-lg-4">
+                                        <button class="btn btn-primary w-100 w-lg-auto" data-bs-toggle="modal" data-bs-target="#ModalAddComptabilite">
+                                            Ajoute comptabilité
+                                        </button>
+                                    </div>
+
+                                    <!-- Button: Retour -->
+                                    <div class="col-12 col-lg-4 text-lg-end">
+                                        <a href="{{ url('Setting') }}" class="btn btn-warning w-100 w-lg-auto">
+                                            Retour
+                                        </a>
+                                    </div>
+
+                                    <!-- Button: Page d'accueil -->
+                                    <div class="col-12 col-lg-4 text-lg-end">
+                                        <a href="{{ url('home') }}" class="btn btn-primary w-100 w-lg-auto">
+                                            Page d'accueil
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
                             
                             <div class="table-responsive">

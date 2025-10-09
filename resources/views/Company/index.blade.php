@@ -48,16 +48,36 @@
 
             <div class="row">
                 <div class="col-12"> 
-                    <div class="card">
+                    <div class="card"> 
 
                         <div class="card-body">
                             <div class=" mb-3">
-                                <button class="btn btn-primary"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCompany">Ajoute compagnie</button>
-                                <button class="btn bg-primary-subtle"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient1">Accorder le client à compagnie</button>
-                                <button class="btn btn-info"           style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalLivreurByCompany" id="BtnDisplayLivreur">Accorder le livreur à compagnie</button>
-                                <button class="btn btn-secondary"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button>
-                                <a href="{{url('Setting')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
-                                <a href="{{url('home')}}" class="btn btn-primary float-end"         style="margin-right: 5px" >Page d'accueil</a>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-xl-2">
+                                        <button class="btn btn-primary mt-2"        style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalAddCompany">Ajoute compagnie</button>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-xl-2">
+                                        <button class="btn bg-primary-subtle mt-2"  style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalClientByCompany" id="BtnDisplayClient1">Accorder le client à compagnie</button>
+                                    </div>
+                                   <div class="col-sm-12 col-md-12 col-xl-2">
+                                        <button class="btn btn-info mt-2"           style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalLivreurByCompany" id="BtnDisplayLivreur">Accorder le livreur à compagnie</button>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-xl-2">
+                                        <button class="btn btn-secondary mt-2"      style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#ModalProductByCompany" id="BtnDisplayProduct">Accorder le produit à compagnie</button>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-xl-2">
+                                        <a href="{{url('Setting')}}" class="btn btn-warning float-end mt-2"      style="margin-right: 5px" >Retour</a>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-xl-2">
+                                        <a href="{{url('home')}}" class="btn btn-primary float-end mt-2"         style="margin-right: 5px" >Page d'accueil</a>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                
+                                
+                                
                             </div>
                             
                             <div class="table-responsive">
@@ -345,6 +365,19 @@
 
         
 </div>
+<script>
+   $(document).ready(function() {
+    $('.btn.float-end').each(function() {
+        const $col = $(this).closest('[class*="col-"]'); // find parent column
+
+        // check if parent has col-sm-12 or col-md-12
+        if ($col.hasClass('col-sm-12') || $col.hasClass('col-md-12')) {
+            $(this).removeClass('float-end');
+        }
+    });
+});
+
+</script>
 
 
 

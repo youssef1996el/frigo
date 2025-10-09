@@ -41,36 +41,38 @@
                     </div>
                 </form>
             </div>
-
-            <table class="table table-bordered" id="tableBilan" data-page-lenght="-1">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th style="background-color: rgb(248, 154, 154)">Sortie de caisses vides</th>
-                        <th style="background-color: rgb(174, 245, 174)">Entré de marchandises</th>
-                        <th style="background-color: rgb(114, 235, 205)">Sortie de marchandises</th>
-                        <th style="background-color: rgb(247, 211, 211)">Retour de caisses vides</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($mergedData as $row)
+            <div class="table-responsive">
+                <table class="table table-bordered" id="tableBilan" data-page-lenght="-1">
+                    <thead>
                         <tr>
-                            <td style="white-space: nowrap">{{ $row['date'] }}</td>
-                            <td style="background-color: rgb(248, 154, 154)" >{{ intval($row['caisseVide'] )}}</td>
-                            <td style="background-color: rgb(174, 245, 174)">{{ intval($row['totalEntree']) }}</td>
-                            <td style="background-color: rgb(114, 235, 205)">{{ $row['totalSortie'] }}</td>
-                            <td style="background-color: rgb(247, 211, 211)">{{ $row['caisseRetour'] }}</td>
+                            <th>Date</th>
+                            <th style="background-color: rgb(248, 154, 154)">Sortie de caisses vides</th>
+                            <th style="background-color: rgb(174, 245, 174)">Entré de marchandises</th>
+                            <th style="background-color: rgb(114, 235, 205)">Sortie de marchandises</th>
+                            <th style="background-color: rgb(247, 211, 211)">Retour de caisses vides</th>
                         </tr>
-                    @endforeach
-                    <tr>
-                        <td>Totaux</td>
-                        <td style="background-color: rgb(248, 154, 154)">{{ $totals['caisseVide'] }}</td>
-                        <td style="background-color: rgb(174, 245, 174)">{{ $totals['totalEntree'] }}</td>
-                        <td style="background-color: rgb(114, 235, 205)">{{ $totals['totalSortie'] }}</td>
-                        <td style="background-color: rgb(247, 211, 211)">{{ $totals['caisseRetour'] }}</td>
-                    </tr>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($mergedData as $row)
+                            <tr>
+                                <td style="white-space: nowrap">{{ $row['date'] }}</td>
+                                <td style="background-color: rgb(248, 154, 154)" >{{ intval($row['caisseVide'] )}}</td>
+                                <td style="background-color: rgb(174, 245, 174)">{{ intval($row['totalEntree']) }}</td>
+                                <td style="background-color: rgb(114, 235, 205)">{{ $row['totalSortie'] }}</td>
+                                <td style="background-color: rgb(247, 211, 211)">{{ $row['caisseRetour'] }}</td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td>Totaux</td>
+                            <td style="background-color: rgb(248, 154, 154)">{{ $totals['caisseVide'] }}</td>
+                            <td style="background-color: rgb(174, 245, 174)">{{ $totals['totalEntree'] }}</td>
+                            <td style="background-color: rgb(114, 235, 205)">{{ $totals['totalSortie'] }}</td>
+                            <td style="background-color: rgb(247, 211, 211)">{{ $totals['caisseRetour'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
             <table class="table table-striped table-bordered w-50 mt-5">
                 <tr>
                     <th class="fs-3 text-uppercase">Caisses vides retirées</th>

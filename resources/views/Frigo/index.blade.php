@@ -51,45 +51,49 @@
              <div class=" mb-3">
                 <a href="{{url('/home')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
             </div>
-
-            <div class="table-responsive mt-3">
-                <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height d-flex justify-content-center w-100">
-                    <div class="datatable-container w-75" >
-                        <table class="table datatable datatable-table w-100 " >
-                            <thead>
-                                <tr>
-                                    <th colspan="3" class="text-uppercase bg-primary-subtle">Frigo</th>
-                                </tr>
-                                <tr>
-                                    <th>Dotation</th>
-                                    <th>Charge</th>
-                                    <th>Montant</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <input type="number" name="dotation" id="inputDotation" class="form-control">
-                                    </td>
-                                    <td>
-                                        <select name="charge_id" id="inputCharge" class="form-select">
-                                            <option value="0">veuillez sélectionner la charge</option>
-                                            @foreach ($Charges as $item)
-                                                <option value="{{$item->id}}">{{$item->libelle}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" id="inputMontant" class="form-control" name="montant">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <button class="btn btn-success" id="btnValidate">Validation</button>
-                        <a href="{{route('frigo.export')}}" class="btn btn-primary" >Export excel</a>
+            <div class="row mt-5">
+                <div class="col-sm-12 col-md-12 col-xl-12">
+                    <div class="table-responsive mt-3">
+                        <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height d-flex justify-content-center w-100">
+                            <div class="datatable-container w-100" >
+                                <table class="table datatable datatable-table w-100 " >
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3" class="text-uppercase bg-primary-subtle">Frigo</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Dotation</th>
+                                            <th>Charge</th>
+                                            <th>Montant</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="number" name="dotation" id="inputDotation" class="form-control">
+                                            </td>
+                                            <td>
+                                                <select name="charge_id" id="inputCharge" class="form-select">
+                                                    <option value="0">veuillez sélectionner la charge</option>
+                                                    @foreach ($Charges as $item)
+                                                        <option value="{{$item->id}}">{{$item->libelle}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" id="inputMontant" class="form-control" name="montant">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button class="btn btn-success" id="btnValidate">Validation</button>
+                                <a href="{{route('frigo.export')}}" class="btn btn-primary" >Export excel</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            
 
             <div class="table-responsive mt-3">
                 @if (session('success'))
