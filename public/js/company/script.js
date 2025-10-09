@@ -185,7 +185,7 @@ $(document).ready(function () {
     //$('#TableClientByCompany').DataTable();
 
 
-   /*  $(function ()
+    $(function ()
     {
 
         TableClientByCompany('#TableClientByCompany');
@@ -228,7 +228,7 @@ $(document).ready(function () {
 
 
         }
-    }); */
+    });
 
     
 
