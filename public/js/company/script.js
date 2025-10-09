@@ -483,25 +483,19 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status == 200) {
-                    //console.log(response.DataClient);
                     $('#select-company').val(response.IdCompany).change();
-                    let clientIds = response.DataClient.map(item => item.idpermission);
-                    /* $('#TableClientByCompany tbody tr').each(function () {
-                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
-                        if (clientIds.includes(parseInt(checkboxValue))) {
-                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
-                        } else {
-                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
-                        }
-                    }); */
+
+                    let dataClient = typeof response.DataClient === 'string' 
+                        ? JSON.parse(response.DataClient) 
+                        : response.DataClient;
+
+                    let clientIds = dataClient.map(item => Number(item.idpermission));
+
                     setTimeout(() => {
                         $('#TableClientByCompany tbody tr').each(function () {
-                            let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
-                            if (clientIds.includes(parseInt(checkboxValue))) {
-                                $(this).find('.ajouterAndSupprimer').prop('checked', true);
-                            } else {
-                                $(this).find('.ajouterAndSupprimer').prop('checked', false);
-                            }
+                            let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
+                            $(this).find('.ajouterAndSupprimer')
+                                .prop('checked', clientIds.includes(checkboxValue));
                         });
                     }, 300);
                 }
