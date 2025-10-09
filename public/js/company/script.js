@@ -486,14 +486,24 @@ $(document).ready(function () {
                     //console.log(response.DataClient);
                     $('#select-company').val(response.IdCompany).change();
                     let clientIds = response.DataClient.map(item => item.idpermission);
-                    $('#TableClientByCompany tbody tr').each(function () {
+                    /* $('#TableClientByCompany tbody tr').each(function () {
                         let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
                         if (clientIds.includes(parseInt(checkboxValue))) {
                             $(this).find('.ajouterAndSupprimer').prop('checked', true);
                         } else {
                             $(this).find('.ajouterAndSupprimer').prop('checked', false);
                         }
-                    });
+                    }); */
+                    setTimeout(() => {
+                        $('#TableClientByCompany tbody tr').each(function () {
+                            let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
+                            if (clientIds.includes(parseInt(checkboxValue))) {
+                                $(this).find('.ajouterAndSupprimer').prop('checked', true);
+                            } else {
+                                $(this).find('.ajouterAndSupprimer').prop('checked', false);
+                            }
+                        });
+                    }, 300);
                 }
             }
         });

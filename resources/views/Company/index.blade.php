@@ -78,7 +78,7 @@
                                 
                                 
                                 
-                            </div>
+                            </div> 
                             
                             <div class="table-responsive">
                                 <div class="datatable-wrapper datatable-loading no-footer sortable fixed-height fixed-columns">
