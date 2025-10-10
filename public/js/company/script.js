@@ -472,7 +472,7 @@ $(document).ready(function () {
     });
 
 
-    $('#BtnDisplayClient1').on('click',function(e)
+    /* $('#BtnDisplayClient1').on('click',function(e)
     {
        
         e.preventDefault();
@@ -502,7 +502,41 @@ $(document).ready(function () {
                 }
             }
         });
+    }); */
+    $('#TableClientByCompany').on('draw.dt', function () {
+    if (window.clientIds) {
+        $('#TableClientByCompany tbody tr').each(function () {
+            let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
+            $(this).find('.ajouterAndSupprimer')
+                .prop('checked', window.clientIds.includes(checkboxValue));
+        });
+    }
+});
+
+$('#BtnDisplayClient1').on('click', function (e) {
+    e.preventDefault();
+    $('#ModalClientByCompany').modal("show");
+
+    $.ajax({
+        type: "get",
+        url: DisplayClientBycompany,
+        data: "data",
+        dataType: "json",
+        success: function (response) {
+            if (response.status == 200) {
+                $('#select-company').val(response.IdCompany).change();
+                let dataClient = typeof response.DataClient === 'string'
+                    ? JSON.parse(response.DataClient)
+                    : response.DataClient;
+
+                window.clientIds = dataClient.map(item => Number(item.idpermission));
+
+                $('#TableClientByCompany').DataTable().draw(false);
+            }
+        }
     });
+});
+
 
     $('#select-company').on('change',function(e)
     {
