@@ -230,18 +230,24 @@ $(document).ready(function () {
         }
     }); */
     $(function () {
+
+    // مصفوفة لتخزين الـ IDs اللي تم تحديدها
     var clientIds = [];
 
+    // تهيئة DataTable مرة واحدة فقط
     var TableClientByCompany = $('#TableClientByCompany').DataTable({
         language: {
-            "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-            "sLengthMenu": "Afficher _MENU_ éléments",
-            "sSearch": "Rechercher :",
-            "sZeroRecords": "Aucun élément correspondant trouvé",
-        }
+            "sInfo": "عرض من _START_ إلى _END_ من أصل _TOTAL_ عنصر",
+            "sLengthMenu": "عرض _MENU_ عنصر",
+            "sSearch": "بحث:",
+            "sZeroRecords": "لا توجد نتائج مطابقة",
+        },
+        destroy: false,
+        retrieve: true,
+        responsive: true,
     });
 
-    // Reapply checkboxes every time DataTable draws
+    // ✅ إعادة تفعيل الـ checkboxes بعد كل عملية redraw
     TableClientByCompany.on('draw', function () {
         $('#TableClientByCompany tbody tr').each(function () {
             let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
@@ -249,6 +255,7 @@ $(document).ready(function () {
         });
     });
 
+    // ✅ عند الضغط على الزر وفتح المودال
     $('#BtnDisplayClient1').on('click', function (e) {
         e.preventDefault();
         $('#ModalClientByCompany').modal('show');
@@ -256,23 +263,43 @@ $(document).ready(function () {
         $.ajax({
             type: "get",
             url: DisplayClientBycompany,
-            data:"data",
+            data: "data",
             dataType: "json",
+            cache: false,
             success: function (response) {
                 if (response.status == 200) {
                     $('#select-company').val(response.IdCompany).change();
+
                     let dataClient = typeof response.DataClient === 'string'
                         ? JSON.parse(response.DataClient)
                         : response.DataClient;
 
+                    // نخزن كل الـ IDs اللي رجعت من السيرفر
                     clientIds = dataClient.map(item => Number(item.idpermission));
 
-                    TableClientByCompany.draw(); // trigger draw event to recheck
+                    // نعيد رسم الجدول بعد لحظة بسيطة
+                    setTimeout(() => {
+                        TableClientByCompany.draw(false);
+                    }, 300);
                 }
+            },
+            error: function (xhr, status, error) {
+                console.error("خطأ في الطلب:", error);
             }
         });
     });
+
+    // ✅ نراقب التغييرات اليدوية من المستخدم (check/uncheck)
+    $(document).on('change', '.ajouterAndSupprimer', function () {
+        let id = Number($(this).val());
+        if ($(this).is(':checked')) {
+            if (!clientIds.includes(id)) clientIds.push(id);
+        } else {
+            clientIds = clientIds.filter(x => x !== id);
+        }
+    });
 });
+
 
 
     
