@@ -332,7 +332,7 @@ class ClientController extends Controller
         $CaisseVidee = DB::select('select date(created_at) as dateCaisseVide,sum(number_box) as caisseVide from caissevides where idclient = ? and idcompany =?
         group by date(created_at)  order by date(created_at)',[$idclient,$idCompa]);
 
-        $MarchandiseEntree = DB::select('select pro.name,sum(m.number_box) as qteentree,date(l.created_at) as date
+        $MarchandiseEntree = DB::select('select pro.name,sum(l.quantity) as qteentree,date(l.created_at) as date
         from marchandis_entree m ,ligne_marchandis l , list_origins as pro
         where m.id = l.id_marchandis_entree 
         and l.idproduct = pro.id
