@@ -185,7 +185,7 @@ $(document).ready(function () {
     //$('#TableClientByCompany').DataTable();
 
 
-    $(function ()
+    /* $(function ()
     {
 
         TableClientByCompany('#TableClientByCompany');
@@ -228,28 +228,14 @@ $(document).ready(function () {
 
 
         }
-    });
-
-    
-
-    
-
-
-    /* $('#SaveClientByCompany').on('click', function (e) {
-
-        // تحقق كم عددها التي تم تحديدها
-        let checkedCount = $checkboxes.filter(':checked').length;
-
-        // إذا تم اختيار checkboxين في نفس الصف، عرض رسالة
-        if (checkedCount === 2) {
-            //alert('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.');
-
-            new AWN().warning('Erreur : Vous ne pouvez pas sélectionner Ajouter et Supprimer pour le même client.', {durations: {warning: 5000}});
-
-            // اختياري: إلغاء تحديد هذا الـ checkbox الأخير
-            $(this).prop('checked', false);
-        }
     }); */
+
+    
+
+    
+
+
+    
 
     $('#TableLivreurByCompany').on('change', 'input[type="checkbox"]', function () {
         let $row = $(this).closest('tr'); // احصل على الصف الحالي
@@ -472,7 +458,7 @@ $(document).ready(function () {
     });
 
 
-    /* $('#BtnDisplayClient1').on('click',function(e)
+    $('#BtnDisplayClient1').on('click',function(e)
     {
        
         e.preventDefault();
@@ -502,8 +488,8 @@ $(document).ready(function () {
                 }
             }
         });
-    }); */
-    $('#TableClientByCompany').on('draw.dt', function () {
+    });
+    /* $('#TableClientByCompany').on('draw.dt', function () {
         if (window.clientIds) {
             $('#TableClientByCompany tbody tr').each(function () {
                 let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
@@ -511,9 +497,9 @@ $(document).ready(function () {
                     .prop('checked', window.clientIds.includes(checkboxValue));
             });
         }
-    });
+    }); */
 
-    $('#BtnDisplayClient1').on('click', function (e) {
+    /* $('#BtnDisplayClient1').on('click', function (e) {
         e.preventDefault();
         $('#ModalClientByCompany').modal("show");
 
@@ -531,11 +517,11 @@ $(document).ready(function () {
 
                     window.clientIds = dataClient.map(item => Number(item.idpermission));
 
-                    $('#TableClientByCompany').DataTable().draw(false);
+                    //$('#TableClientByCompany').DataTable().draw(false);
                 }
             }
         });
-    });
+    }); */
 
 
     $('#select-company').on('change',function(e)
