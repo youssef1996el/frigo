@@ -237,10 +237,10 @@ $(document).ready(function () {
     // تهيئة DataTable مرة واحدة فقط
     var TableClientByCompany = $('#TableClientByCompany').DataTable({
         language: {
-            "sInfo": "عرض من _START_ إلى _END_ من أصل _TOTAL_ عنصر",
-            "sLengthMenu": "عرض _MENU_ عنصر",
-            "sSearch": "بحث:",
-            "sZeroRecords": "لا توجد نتائج مطابقة",
+            "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+            "sLengthMenu": "Afficher _MENU_ éléments",
+            "sSearch": "Rechercher :",
+            "sZeroRecords": "Aucun élément correspondant trouvé",
         },
         destroy: false,
         retrieve: true,
@@ -280,7 +280,7 @@ $(document).ready(function () {
                     // نعيد رسم الجدول بعد لحظة بسيطة
                     setTimeout(() => {
                         TableClientByCompany.draw(false);
-                    }, 300);
+                    }, 300000);
                 }
             },
             error: function (xhr, status, error) {
