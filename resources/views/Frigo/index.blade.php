@@ -36,18 +36,31 @@
         <!-- Start Content-->
         <div class="container-fluid">
 
-            <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column border bg-light rounded-2 py-2">
-                <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold m-0">Frigo </h4>
-                </div>
-                
-                <div class="text-end">
-                    <ol class="breadcrumb m-0 py-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
-                        <li class="breadcrumb-item active">Frigo</li>
-                    </ol>
+            <div class="py-3 border bg-light rounded-2">
+                <div class="row align-items-center">
+
+                    <!-- LEFT -->
+                    <div class="col-sm-12 col-md-12 col-xl-4">
+                        <h4 class="fs-18 fw-semibold m-0">Frigo</h4>
+                    </div>
+
+                    <!-- CENTER -->
+                    <div class="col-sm-12 col-md-12 col-xl-4 text-center">
+                        <h4 class="m-0 text-success">Comptabilite est active : {{ $name_comptablite_active }}</h4>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="col-sm-12 col-md-12 col-xl-4 d-flex justify-content-end align-items-center">
+                        <ol class="breadcrumb m-0 py-0">
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">Apps</a></li>
+                            <li class="breadcrumb-item active">Frigo</li>
+                        </ol>
+                    </div>
+
                 </div>
             </div>
+
+
              <div class=" mb-3">
                 <a href="{{url('/home')}}" class="btn btn-warning float-end"      style="margin-right: 5px" >Retour</a>
             </div>
