@@ -278,9 +278,9 @@ $(document).ready(function () {
                     clientIds = dataClient.map(item => Number(item.idpermission));
 
                     // نعيد رسم الجدول بعد لحظة بسيطة
-                    setTimeout(() => {
+                    /* setTimeout(() => {
                         TableClientByCompany.draw(false);
-                    }, 300000);
+                    }, 300000); */
                 }
             },
             error: function (xhr, status, error) {
