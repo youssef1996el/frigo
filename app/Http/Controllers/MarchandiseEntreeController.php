@@ -94,6 +94,8 @@ class MarchandiseEntreeController extends Controller
             ->where('d.role', 'Product')
             ->select('l.name', 'l.id')
             ->get();
+        $role_name = User::find(Auth::user()->id);
+        $role_name = $role_name->getRoleNames()[0];
         if($request->ajax())
         {
             //get company is active
@@ -128,7 +130,7 @@ class MarchandiseEntreeController extends Controller
 
             return DataTables::of($Data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
+                ->addColumn('action', function ($row) use ($role_name) {
                     //$user = auth()->user();
                     $btn = '';
 
@@ -156,14 +158,14 @@ class MarchandiseEntreeController extends Controller
                             </a>';
                 }
                 $rowUser = User::find($row->user_id);
-                if ($rowUser && $rowUser->hasPermissionTo('delete-item')) 
-                {
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseEntree"
+                if ($role_name == 'Super Admin' ||  $role_name == 'Admin') {
+                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseEntree"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer cette bon sortie">
                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                             </a>';
                 }
+                
                 /* if ($user && $user->can('company-supprimer')) { */
                     
                 /* } */

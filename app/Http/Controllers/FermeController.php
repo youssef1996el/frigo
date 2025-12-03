@@ -15,7 +15,7 @@ class FermeController extends Controller
 {
     public function index()
     {
-        
+        $name_comptablite_active = DB::table('comptabilite')->where('status',1)->first();
         $operations = Ferme::select(
             DB::raw('DATE(ferme.date) as operation_date'),
             DB::raw('SUM(ferme.dotation) as sum_dotation'),
@@ -46,14 +46,26 @@ class FermeController extends Controller
 
         $chargesDetail = DB::table('charges')->pluck('libelle', 'id');
 
-        $operationsCharge = DB::table('ferme')
+        $id_comptablite_is_active  = $name_comptablite_active->id;
+
+        $operationsCharge = DB::table('ferme as f')
+        ->join('comptabilite as c','c.id','=','f.idcomptabilite')
+        ->select(DB::raw('DATE(date) as date'),'charge_id',DB::raw('SUM(montant) as montant'))
+        ->where('idcomptabilite',$id_comptablite_is_active)
+        ->groupBy(DB::raw('DATE(date)'), 'charge_id')
+                ->get();
+
+        $operationsCharge = $operationsCharge->filter(function ($item) {
+            return !is_null($item->montant) && !is_null($item->charge_id);
+        });
+       /*  $operationsCharge = DB::table('ferme')
                 ->select(
                     DB::raw('DATE(date) as date'),
                     'charge_id',
                     DB::raw('SUM(montant) as montant')
                 )
                 ->groupBy(DB::raw('DATE(date)'), 'charge_id')
-                ->get();
+                ->get(); */
 
         
         $grouped = [];
@@ -87,6 +99,7 @@ class FermeController extends Controller
         ->with('operations',$operations)
         ->with('chargesDetail', $chargesDetail)
         ->with('grouped', $grouped)
+        ->with('name_comptablite_active', $name_comptablite_active->name)
         ->with('totals', $totals);
     }
 

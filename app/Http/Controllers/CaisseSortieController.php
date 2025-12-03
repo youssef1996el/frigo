@@ -33,6 +33,9 @@ class CaisseSortieController extends Controller
         {
             return view("Error.index")->withErrors('tu n\'as pas de livreur ');
         }
+        $role_name = User::find(Auth::user()->id);
+        $role_name = $role_name->getRoleNames()[0];
+       
         if($request->ajax())
         {
             //get company is active
@@ -51,42 +54,34 @@ class CaisseSortieController extends Controller
                                     'l.cin','l.matricule','l.name as namelivreur','co.id as idcustomer','l.id as idDelivery','u.id as user_id'
                                 )->orderByDesc('c.id');
 
-            return DataTables::of($Data_Caisse_Vide)
-    ->addIndexColumn()
-    ->addColumn('action', function ($row) {
-        // المستخدم الحالي
-        $btn = '';
+            return DataTables::of($Data_Caisse_Vide)->addIndexColumn()->addColumn('action', function ($row) use ($role_name) {
 
-        // زر الطباعة
-        $btn .= '<a href="' . url("PrintCaisseVide/" . $row->id) . '" class="btn btn-sm bg-warning-subtle me-1" 
-                    data-id="' . $row->id . '"  
-                    title="Imprimer cette bon sortie" 
-                    data-client="' . $row->idcustomer . '" 
-                    data-livreur="' . $row->idDelivery . '"
-                    onclick="setTimeout(function(){ window.location.reload(); }, 1000)">
-                    <i class="mdi mdi-printer fs-14 text-warning"></i>
-                 </a>';
+                $btn = '';
 
-        // إذا الكلاوزر مغلق
-        if ($row->clotuer) {
-            $btn .= '<a href="#" target="_blank" class="btn btn-sm bg-info-subtle me-1">
-                        <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
-                     </a>';
-        }
-        $rowUser = User::find($row->user_id);
-        // زر الحذف، فقط إذا المستخدم لديه صلاحية 'delete-item' و الصف غير مغلق
-        if ($rowUser && $rowUser->hasPermissionTo('delete-item')) {
-            $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseVide"
-                        data-id="' . $row->id . '" data-bs-toggle="tooltip" 
-                        title="Supprimer cette bon sortie">
-                        <i class="mdi mdi-delete fs-14 text-danger"></i>
-                     </a>';
-        }
+                $btn .= '<a href="' . url("PrintCaisseVide/" . $row->id) . '" class="btn btn-sm bg-warning-subtle me-1"
+                            title="Imprimer cette bon sortie"
+                            onclick="setTimeout(function(){ window.location.reload(); }, 1000)">
+                            <i class="mdi mdi-printer fs-14 text-warning"></i>
+                        </a>';
 
-        return $btn;
-    })
-    ->rawColumns(['action']) // لتجنب ترميز HTML
-    ->make(true);
+                if ($row->clotuer) {
+                    $btn .= '<a href="#" class="btn btn-sm bg-info-subtle me-1">
+                                <i class="mdi mdi-check-decagram fs-14 text-primary"></i>
+                            </a>';
+                }
+
+                $rowUser = User::find($row->user_id);
+
+                if ($role_name == 'Super Admin' ||  $role_name == 'Admin') {
+                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseVide"
+                                data-id="' . $row->id . '"
+                                title="Supprimer cette bon sortie">
+                                <i class="mdi mdi-delete fs-14 text-danger"></i>
+                            </a>';
+                }
+
+                return $btn;
+            })->rawColumns(['action'])->make(true);
 
 
         }

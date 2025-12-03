@@ -86,7 +86,8 @@ class MarchandiseSortieController extends Controller
             ->where('d.role', 'Product')
             ->select('l.name', 'l.id')
             ->get();
-
+         $role_name = User::find(Auth::user()->id);
+        $role_name = $role_name->getRoleNames()[0];
         if ($request->ajax()) {
             $CompanyIsActive = Company::where('status', 1)->value('status');
             $IdCompany = Company::where('status', $CompanyIsActive)->value('id');
@@ -122,7 +123,7 @@ class MarchandiseSortieController extends Controller
 
             return DataTables::of($Data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
+                ->addColumn('action', function ($row) use ($role_name) {
                     $btn = '';
 
                     $btn .= '<a href="' . url("ViewListMarchandiseSortie/" . $row->id) . '"  target="_blank" class="btn btn-sm bg-primary-subtle me-1"
@@ -147,14 +148,14 @@ class MarchandiseSortieController extends Controller
                                 </a>';
                     }
                     $rowUser = User::find($row->user_id);
-                    if ($rowUser && $rowUser->hasPermissionTo('delete-item')) 
-                    {
-                        $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseSortie"
+                    if ($role_name == 'Super Admin' ||  $role_name == 'Admin') {
+                         $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle DeleteMarchandiseSortie"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer cette bon sortie">
                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                             </a>';
                     }
+                    
                     
 
                     return $btn;

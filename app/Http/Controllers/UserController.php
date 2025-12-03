@@ -142,13 +142,21 @@ class UserController extends Controller
          /* compact('user', 'permissions')); */
     }
 
-    public function updateUserPermissions(UpdateUserRequest $request, $id):RedirectResponse
-    {
-        
-        $user = User::findOrFail($id);
+ public function updateUserPermissions(UpdateUserRequest $request, $id): RedirectResponse
+{
+    $user = User::findOrFail($id);
 
-        $user->syncPermissions($request->permissions ?? []);
+    // ⚠️ 1. حذف صلاحيات المستخدم فقط (model_has_permissions)
+    $user->permissions()->detach();
 
-        return redirect()->back()->with('success', 'Les autorisations ont été mises à jour avec succès!');
+    // ⚠️ 2. إضافة الصلاحيات الجديدة باستخدام givePermissionTo
+    if ($request->permissions) {
+        foreach ($request->permissions as $permission) {
+            $user->givePermissionTo($permission);
+        }
     }
+
+    return redirect()->back()->with('success', 'Permissions updated successfully!');
+}
+
 }

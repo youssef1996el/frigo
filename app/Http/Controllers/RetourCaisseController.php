@@ -35,6 +35,8 @@ class RetourCaisseController extends Controller
         {
             return view("Error.index")->withErrors('tu n\'as pas de livreur ');
         }
+         $role_name = User::find(Auth::user()->id);
+        $role_name = $role_name->getRoleNames()[0];
         if($request->ajax())
         {
             //get company is active
@@ -55,7 +57,7 @@ class RetourCaisseController extends Controller
 
             return DataTables::of($Data_Caisse_Vide)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
+                ->addColumn('action', function ($row) use ($role_name) {
                     
                     $btn = '';
 
@@ -81,14 +83,14 @@ class RetourCaisseController extends Controller
 
                 $rowUser = User::find($row->user_id);
                  // زر الحذف، فقط إذا المستخدم لديه صلاحية 'delete-item' و الصف غير مغلق
-                if ($rowUser && $rowUser->hasPermissionTo('delete-item'))
-                {
-                    $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseRetour"
+                 if ($role_name == 'Super Admin' ||  $role_name == 'Admin') {
+                     $btn .= '<a href="#" class="btn btn-sm bg-danger-subtle deleteCaisseRetour"
                                 data-id="' . $row->id . '" data-bs-toggle="tooltip" 
                                 title="Supprimer cette bon sortie">
                                 <i class="mdi mdi-delete fs-14 text-danger"></i>
                             </a>';
-                }
+                 }
+                
                 /* if ($user && $user->can('company-supprimer')) { */
                    
                 /* } */
