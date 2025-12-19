@@ -279,7 +279,13 @@ class CompanyController extends Controller
 
             $CompanyIsActive = $request->idcompany;
         }
-        $ClientByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Client" ',[$CompanyIsActive]);
+        $ClientByCompany = DB::table('display_with_company')
+        ->select('idpermission')
+        ->where('idcompany',$CompanyIsActive)
+        ->where('role','Client')
+        ->get();
+
+        //$ClientByCompany = DB::select('select idpermission from display_with_company where idcompany = ? and role="Client" ',[$CompanyIsActive]);
         
         
         return response()->json([

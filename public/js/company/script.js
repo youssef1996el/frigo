@@ -182,81 +182,36 @@ $(document).ready(function () {
 
 
 
-    //$('#TableClientByCompany').DataTable();
-
-
-    /* $(function ()
+    
+    $(function () 
     {
 
-        TableClientByCompany('#TableClientByCompany');
-        function TableClientByCompany(selector)
-        {
-            var TableClientByCompany = $(selector).DataTable({
+        // مصفوفة لتخزين الـ IDs اللي تم تحديدها
+        var clientIds = [];
 
-
-
-                language: {
-                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ",",
-                    "sLengthMenu": "Afficher _MENU_ éléments",
-                    "sLoadingRecords": "Chargement...",
-                    "sProcessing": "Traitement...",
-                    "sSearch": "Rechercher :",
-                    "sZeroRecords": "Aucun élément correspondant trouvé",
-                    "oPaginate": {
-                        "sFirst": "Premier",
-                        "sLast": "Dernier",
-                        "sNext": "Suivant",
-                        "sPrevious": "Précédent"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-                    },
-                    "select": {
-                        "rows": {
-                            "_": "%d lignes sélectionnées",
-                            "0": "Aucune ligne sélectionnée",
-                            "1": "1 ligne sélectionnée"
-                        }
-                    }
-                }
-            });
-
-
-        }
-    }); */
-    $(function () {
-
-    // مصفوفة لتخزين الـ IDs اللي تم تحديدها
-    var clientIds = [];
-
-    // تهيئة DataTable مرة واحدة فقط
-    var TableClientByCompany = $('#TableClientByCompany').DataTable({
-        language: {
-            "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-            "sLengthMenu": "Afficher _MENU_ éléments",
-            "sSearch": "Rechercher :",
-            "sZeroRecords": "Aucun élément correspondant trouvé",
-        },
-        destroy: false,
-        retrieve: true,
-        responsive: true,
-    });
-
-    // ✅ إعادة تفعيل الـ checkboxes بعد كل عملية redraw
-    TableClientByCompany.on('draw', function () {
-        $('#TableClientByCompany tbody tr').each(function () {
-            let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
-            $(this).find('.ajouterAndSupprimer').prop('checked', clientIds.includes(checkboxValue));
+        // تهيئة DataTable مرة واحدة فقط
+        var TableClientByCompany = $('#TableClientByCompany').DataTable({
+            language: {
+                "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                "sLengthMenu": "Afficher _MENU_ éléments",
+                "sSearch": "Rechercher :",
+                "sZeroRecords": "Aucun élément correspondant trouvé",
+            },
+            destroy: false,
+            retrieve: true,
+            responsive: true,
         });
-    });
+
+        // ✅ إعادة تفعيل الـ checkboxes بعد كل عملية redraw
+        TableClientByCompany.on('draw', function () {
+            $('#TableClientByCompany tbody tr').each(function () {
+                let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
+                $(this).find('.ajouterAndSupprimer').prop('checked', clientIds.includes(checkboxValue));
+            });
+        });
 
     // ✅ عند الضغط على الزر وفتح المودال
-    $('#BtnDisplayClient1').on('click', function (e) {
+    /* $('#BtnDisplayClient1').on('click', function (e) {
         e.preventDefault();
         $('#ModalClientByCompany').modal('show');
 
@@ -278,16 +233,46 @@ $(document).ready(function () {
                     clientIds = dataClient.map(item => Number(item.idpermission));
 
                     // نعيد رسم الجدول بعد لحظة بسيطة
-                    /* setTimeout(() => {
+                    setTimeout(() => {
                         TableClientByCompany.draw(false);
-                    }, 300000); */
+                    }, 300000);
                 }
             },
             error: function (xhr, status, error) {
                 console.error("خطأ في الطلب:", error);
             }
         });
+    }); */
+
+    $('#BtnDisplayClient1').on('click', function (e) {
+        e.preventDefault();
+        
+        $.ajax({
+            type: "get",
+            url: DisplayClientBycompany,
+            data: "data",
+            dataType: "json",
+            success: function (response) 
+            {
+                if(response.status == 200)
+                {
+                    $('#ModalClientByCompany').modal('show');
+                    
+                   $.each(response.DataClient, function (index, value) {
+                        $('#TableClientByCompany')
+                            .find('.toggle-client[value="' + value.idpermission + '"]')
+                            .prop('checked', true);
+                    });
+
+                    
+
+                }
+                
+            }
+        });
+
     });
+
 
     // ✅ نراقب التغييرات اليدوية من المستخدم (check/uncheck)
     $(document).on('change', '.ajouterAndSupprimer', function () {
