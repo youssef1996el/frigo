@@ -246,6 +246,7 @@ $(document).ready(function () {
 
     $('#BtnDisplayClient1').on('click', function (e) {
         e.preventDefault();
+        let idCompany = 0;
         
         $.ajax({
             type: "get",
@@ -263,6 +264,7 @@ $(document).ready(function () {
                             .find('.toggle-client[value="' + value.idpermission + '"]')
                             .prop('checked', true);
                     });
+                    idcompany = response.IdCompany;
                     //$('#select-company').val(response.IdCompany).change();
 
                     
