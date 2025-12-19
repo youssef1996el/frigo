@@ -263,7 +263,7 @@ $(document).ready(function () {
                             .find('.toggle-client[value="' + value.idpermission + '"]')
                             .prop('checked', true);
                     });
-                    $('#select-company').val(response.IdCompany).change();
+                    //$('#select-company').val(response.IdCompany).change();
 
                     
 
