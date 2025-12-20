@@ -248,7 +248,7 @@ $(document).ready(function () {
 
     $('#BtnDisplayClient1').on('click', function (e) {
         e.preventDefault();
-        let idCompany = 0;
+        
         
         $.ajax({
             type: "get",
@@ -266,8 +266,8 @@ $(document).ready(function () {
                             .find('.toggle-client[value="' + value.idpermission + '"]')
                             .prop('checked', true);
                     });
-                    idcompany = response.IdCompany;
-                    //$('#select-company').val(response.IdCompany).change();
+                   
+                    
 
                     
 
@@ -288,6 +288,9 @@ $(document).ready(function () {
                 if(response.status == 200)
                 {
                     $('#select-company').val(response.IdCompany).change();
+                    $('#CompanyLivreur').val(response.IdCompany).change();
+                    $('#CompanyProduct').val(response.IdCompany).change();
+
                 }    
             }
         });
@@ -536,70 +539,7 @@ $(document).ready(function () {
     });
 
 
-    /* $('#BtnDisplayClient1').on('click',function(e)
-    {
-       
-        e.preventDefault();
-        $('#ModalClientByCompany').modal("show");
-        $.ajax({
-            type: "get",
-            url: DisplayClientBycompany,
-            data: "data",
-            dataType: "json",
-            success: function (response) {
-                if (response.status == 200) {
-                    $('#select-company').val(response.IdCompany).change();
-
-                    let dataClient = typeof response.DataClient === 'string' 
-                        ? JSON.parse(response.DataClient) 
-                        : response.DataClient;
-
-                    let clientIds = dataClient.map(item => Number(item.idpermission));
-
-                    setTimeout(() => {
-                        $('#TableClientByCompany tbody tr').each(function () {
-                            let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
-                            $(this).find('.ajouterAndSupprimer')
-                                .prop('checked', clientIds.includes(checkboxValue));
-                        });
-                    }, 300);
-                }
-            }
-        });
-    }); */
-    /* $('#TableClientByCompany').on('draw.dt', function () {
-        if (window.clientIds) {
-            $('#TableClientByCompany tbody tr').each(function () {
-                let checkboxValue = Number($(this).find('.ajouterAndSupprimer').val());
-                $(this).find('.ajouterAndSupprimer')
-                    .prop('checked', window.clientIds.includes(checkboxValue));
-            });
-        }
-    }); */
-
-    /* $('#BtnDisplayClient1').on('click', function (e) {
-        e.preventDefault();
-        $('#ModalClientByCompany').modal("show");
-
-        $.ajax({
-            type: "get",
-            url: DisplayClientBycompany,
-            data: "data",
-            dataType: "json",
-            success: function (response) {
-                if (response.status == 200) {
-                    $('#select-company').val(response.IdCompany).change();
-                    let dataClient = typeof response.DataClient === 'string'
-                        ? JSON.parse(response.DataClient)
-                        : response.DataClient;
-
-                    window.clientIds = dataClient.map(item => Number(item.idpermission));
-
-                    //$('#TableClientByCompany').DataTable().draw(false);
-                }
-            }
-        });
-    }); */
+    
 
 
     $('#select-company').on('change',function(e)
@@ -669,17 +609,13 @@ $(document).ready(function () {
             data: "data",
             dataType: "json",
             success: function (response) {
-                if (response.status == 200) {
-                    $('#CompanyLivreur').val(response.IdCompany).change();
-                    let LivreurIds = response.DataLivreur.map(item => item.idpermission);
-                    $('#TableLivreurByCompany tbody tr').each(function () {
-                        let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
-                        if (LivreurIds.includes(parseInt(checkboxValue))) {
-                            $(this).find('.ajouterAndSupprimer').prop('checked', true);
-                        } else {
-                            $(this).find('.ajouterAndSupprimer').prop('checked', false);
-                        }
+                if (response.status == 200) 
+                {
+                    $.each(response.DataLivreur, function (index, value) 
+                    { 
+                        $('#TableLivreurByCompany').find('.toggle-client[value="' + value.idpermission+ '"]').prop('checked',true);     
                     });
+                   
                 }
             }
         });
