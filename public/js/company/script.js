@@ -243,6 +243,8 @@ $(document).ready(function () {
             }
         });
     }); */
+    
+
 
     $('#BtnDisplayClient1').on('click', function (e) {
         e.preventDefault();
@@ -273,8 +275,24 @@ $(document).ready(function () {
                 
             }
         });
-
     });
+    function getCompanyIsActive()
+    {
+        $.ajax({
+            type: "get",
+            url: DisplayClientBycompany,
+            data: "data",
+            dataType: "json",
+            success: function (response) 
+            {
+                if(response.status == 200)
+                {
+                    $('#select-company').val(response.IdCompany).change();
+                }    
+            }
+        });
+    }
+    getCompanyIsActive();
 
 
     // ✅ نراقب التغييرات اليدوية من المستخدم (check/uncheck)
