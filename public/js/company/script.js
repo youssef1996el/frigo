@@ -680,11 +680,11 @@ $(document).ready(function () {
     });
 
 
-    $('#BtnDisplayProduct').on('click', function (e) {
+    $('#BtnDisplayProduct').on('click', function (e) 
+    {
         e.preventDefault();
 
-        // Disable the button to prevent multiple clicks
-        $(this).prop('disabled', true);
+       
 
         $.ajax({
             type: "get",
@@ -692,8 +692,13 @@ $(document).ready(function () {
             data: "data",
             dataType: "json",
             success: function (response) {
-                if (response.status == 200) {
-                    $('#CompanyProduct').val(response.IdCompany).change();
+                if (response.status == 200) 
+                {
+                    $.each(response.DataProduct, function (index, value) 
+                    { 
+                        $('#TableProductByCompany').find('.toggle-client[value="' + value.idpermission + '"]').prop('checked',true);   
+                    });
+                   /*  $('#CompanyProduct').val(response.IdCompany).change();
                     let ProductIds = response.DataProduct.map(item => item.idpermission);
                     $('#TableProductByCompany tbody tr').each(function () {
                         let checkboxValue = $(this).find('.ajouterAndSupprimer').val();
@@ -702,12 +707,8 @@ $(document).ready(function () {
                         } else {
                             $(this).find('.ajouterAndSupprimer').prop('checked', false);
                         }
-                    });
+                    }); */
                 }
-            },
-            complete: function () {
-                // Re-enable the button after the request completes
-                $('#BtnDisplayProduct').prop('disabled', false);
             }
         });
     });
