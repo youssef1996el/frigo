@@ -25,8 +25,8 @@ class FrigoController extends Controller
         ->join('comptabilite as c','c.id','=','frigo.idcomptabilite')
         ->where('c.status','=',1)
         ->groupBy(DB::raw('DATE(frigo.date)'), 'charges.libelle') 
-        ->orderBy('operation_date', 'desc')
-        ->paginate(20);
+        ->orderBy('operation_date', 'desc')->get();
+        //->paginate(20);
 
        
         $cumulDotation = 0;

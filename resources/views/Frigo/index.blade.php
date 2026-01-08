@@ -169,9 +169,9 @@
                 </table>
 
                 
-                <div class="mt-3">
+                {{-- <div class="mt-3">
                     {{ $operations->links() }}
-                </div>
+                </div> --}}
             </div>
 
             <div class="table-responsive mt-3">

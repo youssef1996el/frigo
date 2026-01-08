@@ -200,6 +200,7 @@ $(document).ready(function () {
             destroy: false,
             retrieve: true,
             responsive: true,
+            paginate:false,
         });
 
         // ✅ إعادة تفعيل الـ checkboxes بعد كل عملية redraw
