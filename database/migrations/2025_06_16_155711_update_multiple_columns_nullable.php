@@ -12,27 +12,39 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('caissevides', function (Blueprint $table) {
-            $table->dropForeign(['idlivreur']);
             $table->unsignedBigInteger('idlivreur')->nullable()->change();
-            $table->foreign('idlivreur')->references('id')->on('livreurs')->onDelete('set null');
+
+            $table->foreign('idlivreur')
+                ->references('id')
+                ->on('livreurs')
+                ->nullOnDelete();
         });
 
         Schema::table('caisse_retour', function (Blueprint $table) {
-            $table->dropForeign(['idlivreur']);
             $table->unsignedBigInteger('idlivreur')->nullable()->change();
-            $table->foreign('idlivreur')->references('id')->on('livreurs')->onDelete('set null');
+
+            $table->foreign('idlivreur')
+                ->references('id')
+                ->on('livreurs')
+                ->nullOnDelete();
         });
 
         Schema::table('marchandis_entree', function (Blueprint $table) {
-            $table->dropForeign(['idlivreur']);
             $table->unsignedBigInteger('idlivreur')->nullable()->change();
-            $table->foreign('idlivreur')->references('id')->on('livreurs')->onDelete('set null');
+
+            $table->foreign('idlivreur')
+                ->references('id')
+                ->on('livreurs')
+                ->nullOnDelete();
         });
 
         Schema::table('marchandise_sortie', function (Blueprint $table) {
-            $table->dropForeign(['idlivreur']);
             $table->unsignedBigInteger('idlivreur')->nullable()->change();
-            $table->foreign('idlivreur')->references('id')->on('livreurs')->onDelete('set null');
+
+            $table->foreign('idlivreur')
+                ->references('id')
+                ->on('livreurs')
+                ->nullOnDelete();
         });
     }
 
