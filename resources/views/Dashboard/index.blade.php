@@ -16,7 +16,7 @@
 
         <!-- App css -->
         
-        <link href="{{asset('css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
+        <link href="{{asset('public/css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
 
         <link rel="stylesheet" href="{{asset('css/styleNotification.css')}}">
         <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
