@@ -18,16 +18,16 @@
         
         <link href="{{asset('public/css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
 
-        <link rel="stylesheet" href="{{asset('css/styleNotification.css')}}">
+        <link rel="stylesheet" href="{{asset('public/css/styleNotification.css')}}">
         <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
         <!-- Icons -->
         
-        <link href="{{asset('css/custom/icons.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('public/css/custom/icons.min.css')}}" rel="stylesheet" type="text/css" />
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         
-        <script src="{{asset('js/head.js')}}"></script>
+        <script src="{{asset('public/js/head.js')}}"></script>
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -137,7 +137,7 @@
                             <!-- User Dropdown -->
                             <li class="dropdown notification-list topbar-dropdown">
                                 <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                    <img src="{{asset('images/user.jpg')}}" alt="user-image" class="rounded-circle" />
+                                    <img src="{{asset('public/images/user.jpg')}}" alt="user-image" class="rounded-circle" />
                                     <span class="pro-user-name ms-1"> {{ Auth::user()->name }} <i class="mdi mdi-chevron-down"></i></span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end profile-dropdown">
@@ -179,18 +179,18 @@
                         <div class="logo-box">
                             <a class='logo logo-light' href='/home'>
                                 <span class="logo-sm">
-                                    <img src="{{asset('images/2.png')}}" alt="" height="22">
+                                    <img src="{{asset('public/images/2.png')}}" alt="" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{asset('images/2.png')}}" alt="" height="200" width="200" style="margin-top:-68px">
+                                    <img src="{{asset('public/images/2.png')}}" alt="" height="200" width="200" style="margin-top:-68px">
                                 </span>
                             </a>
                             <a class='logo logo-dark' href='/home'>
                                 <span class="logo-sm">
-                                    <img src="{{asset('images/2.png')}}" alt="" height="22">
+                                    <img src="{{asset('public/images/2.png')}}" alt="" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{asset('images/2.png')}}" alt="" height="200" width="200" style="margin-top:-68px">
+                                    <img src="{{asset('public/images/2.png')}}" alt="" height="200" width="200" style="margin-top:-68px">
                                 </span>
                             </a>
                         </div>
@@ -365,12 +365,12 @@
         <!-- Vendor -->
         {{-- <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script> --}}
         {{-- <script src="{{asset('js/jquery/jquery.min.js')}}"></script> --}}
-        <script src="{{asset("js/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
-        <script src="{{asset("js/simplebar/simplebar.min.js")}}"></script>
-        <script src="{{asset("js/node-waves/waves.min.js")}}"></script>
-        <script src="{{asset("js/waypoint/lib/jquery.waypoints.min.js")}}"></script>
-        <script src="{{asset("js/jquery-counterup/jquery.counterup.min.js")}}"></script>
-        <script src="{{asset("js/feather-icons/feather.min.js")}}"></script>
+        <script src="{{asset("public/js/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("public/js/simplebar/simplebar.min.js")}}"></script>
+        <script src="{{asset("public/js/node-waves/waves.min.js")}}"></script>
+        <script src="{{asset("public/js/waypoint/lib/jquery.waypoints.min.js")}}"></script>
+        <script src="{{asset("public/js/jquery-counterup/jquery.counterup.min.js")}}"></script>
+        <script src="{{asset("public/js/feather-icons/feather.min.js")}}"></script>
         <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
 
         <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
