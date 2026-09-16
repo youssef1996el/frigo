@@ -44,7 +44,7 @@
 
         
 
-        <script src="{{asset('js/notification/index.js')}}"></script>
+        <script src="{{asset('public/js/notification/index.js')}}"></script>
 
         <style>
              .dataTables_wrapper .dataTables_paginate .paginate_button {
