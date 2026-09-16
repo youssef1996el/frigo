@@ -16,9 +16,9 @@
 
 
         <!-- App css -->
-        <link href="{{asset('css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
+        <link href="{{asset('public/css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
         <!-- Icons -->
-        <link href="{{asset('css/custom/icons.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('public/css/custom/icons.min.css')}}" rel="stylesheet" type="text/css" />
 
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css" integrity="sha512-/k658G6UsCvbkGRB3vPXpsPHgWeduJwiWGPCGS14IQw3xpr63AEMdA8nMYG2gmYkXitQxDTn6iiK/2fD4T87qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -28,7 +28,7 @@
         <style>
             .account-page-bg
             {
-                background-image : url('images/image_login.jpg')
+                background-image : url('public/images/image_login.jpg')
             }
 
             .password-container {
