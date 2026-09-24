@@ -1,4 +1,4 @@
-@extends('dashboard.index')
+@extends('Dashboard.index')
 
 @section('dashboard')
 <script src="{{asset("js/client/script.js")}}"></script>
