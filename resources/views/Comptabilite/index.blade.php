@@ -2,7 +2,7 @@
 
 @section('dashboard')
 {{-- <script src="{{asset('js/company/script.js')}}"></script> --}}
-<script src="{{asset('js/comptabilite/script.js')}}"></script>
+<script src="{{asset('public/js/comptabilite/script.js')}}"></script>
 
 <script>
     var csrf_token                      = "{{csrf_token()}}";

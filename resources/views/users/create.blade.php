@@ -262,16 +262,16 @@
         <!-- END wrapper -->
 
         <!-- Vendor -->
-        <script src="{{asset('js/jquery/jquery.min.js')}}"></script>
-        <script src="{{asset("js/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
-        <script src="{{asset("js/simplebar/simplebar.min.js")}}"></script>
-        <script src="{{asset("js/node-waves/waves.min.js")}}"></script>
-        <script src="{{asset("js/waypoint/lib/jquery.waypoints.min.js")}}"></script>
-        <script src="{{asset("js/jquery-counterup/jquery.counterup.min.js")}}"></script>
-        <script src="{{asset("js/feather-icons/feather.min.js")}}"></script>
+        <script src="{{asset('public/js/jquery/jquery.min.js')}}"></script>
+        <script src="{{asset("public/js/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("public/js/simplebar/simplebar.min.js")}}"></script>
+        <script src="{{asset("public/js/node-waves/waves.min.js")}}"></script>
+        <script src="{{asset("public/js/waypoint/lib/jquery.waypoints.min.js")}}"></script>
+        <script src="{{asset("public/js/jquery-counterup/jquery.counterup.min.js")}}"></script>
+        <script src="{{asset("jpublic/s/feather-icons/feather.min.js")}}"></script>
 
         <!-- App js-->
-        <script src="{{asset("js/app.js")}}"></script>
+        <script src="{{asset("public/js/app.js")}}"></script>
         
     </body>
 </html>

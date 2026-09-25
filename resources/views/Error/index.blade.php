@@ -17,11 +17,11 @@
         <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
 
         <!-- Icons -->
-        <link href="{{asset('css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
+        <link href="{{asset('public/css/custom/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style" />
 
-        <link href="{{asset('css/custom/icons.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('public/css/custom/icons.min.css')}}" rel="stylesheet" type="text/css" />
 
-        <script src="{{asset('js/head.js')}}"></script>
+        <script src="{{asset('public/js/head.js')}}"></script>
 
 
     </head>
@@ -52,7 +52,7 @@
                                     <a class='btn btn-primary mt-3 me-1' href='{{ url()->previous() }}'>Retour à l'accueil</a>
 
                                     <div class="maintenance-img mt-4">
-                                        <img src="{{asset('images/500-error.svg')}}" class="img-fluid" alt="coming-soon">
+                                        <img src="{{asset('public/images/500-error.svg')}}" class="img-fluid" alt="coming-soon">
                                     </div>
 
                                 </div>
@@ -69,14 +69,14 @@
 
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="{{asset("js/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
-        <script src="{{asset("js/simplebar/simplebar.min.js")}}"></script>
-        <script src="{{asset("js/node-waves/waves.min.js")}}"></script>
-        <script src="{{asset("js/waypoint/lib/jquery.waypoints.min.js")}}"></script>
-        <script src="{{asset("js/jquery-counterup/jquery.counterup.min.js")}}"></script>
-        <script src="{{asset("js/feather-icons/feather.min.js")}}"></script>
+        <script src="{{asset("public/js/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
+        <script src="{{asset("public/js/simplebar/simplebar.min.js")}}"></script>
+        <script src="{{asset("public/js/node-waves/waves.min.js")}}"></script>
+        <script src="{{asset("public/js/waypoint/lib/jquery.waypoints.min.js")}}"></script>
+        <script src="{{asset("public/js/jquery-counterup/jquery.counterup.min.js")}}"></script>
+        <script src="{{asset("public/js/feather-icons/feather.min.js")}}"></script>
 
-        <script src="{{asset("js/app.js")}}"></script>
+        <script src="{{asset("public/js/app.js")}}"></script>
         
     </body>
 </html>

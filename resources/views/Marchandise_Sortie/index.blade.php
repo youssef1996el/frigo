@@ -1,8 +1,8 @@
 @extends('Dashboard.index')
 
 @section('dashboard')
-<script src="{{asset("js/MarchandisSortie/script.js")}}"></script>
-<script src="{{asset('js/vente/script.js')}}"></script>
+<script src="{{asset("public/js/MarchandisSortie/script.js")}}"></script>
+<script src="{{asset('public/js/vente/script.js')}}"></script>
 
 <script>
     var csrf_token                                           = "{{csrf_token()}}";

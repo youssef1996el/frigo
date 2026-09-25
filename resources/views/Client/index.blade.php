@@ -1,8 +1,8 @@
 @extends('Dashboard.index')
 
 @section('dashboard')
-<script src="{{asset("js/client/script.js")}}"></script>
-<link rel="stylesheet" href="{{asset('css/Client/style.css')}}">
+<script src="{{asset("public/js/client/script.js")}}"></script>
+<link rel="stylesheet" href="{{asset('public/css/Client/style.css')}}">
 <script>
     var csrf_token                      = "{{csrf_token()}}";
     var AddClient                       = "{{url('AddClient')}}";

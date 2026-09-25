@@ -1,7 +1,7 @@
 @extends('Dashboard.index')
 
 @section('dashboard')
-<script src="{{asset('js/Frigo/script.js')}}"></script>
+<script src="{{asset('public/js/Frigo/script.js')}}"></script>
 <script>
     var csrf_token                      = "{{csrf_token()}}";
     var store                           = "{{url('storeFrigo')}}";

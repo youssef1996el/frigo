@@ -1,6 +1,6 @@
 @extends('Dashboard.index')
 @section('dashboard')
-<script src="{{asset('js/Charge/script.js')}}"></script>
+<script src="{{asset('public/js/Charge/script.js')}}"></script>
 <script>
     var Charge                   = "{{url('Charge')}}";
     var update                   = "{{url('update')}}";

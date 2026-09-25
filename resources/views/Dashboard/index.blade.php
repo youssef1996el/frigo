@@ -380,15 +380,15 @@
 
         <!-- Apexcharts JS -->
         
-        <script src="{{asset("js/apexcharts/apexcharts.min.js")}}"></script>
+        <script src="{{asset("public/js/apexcharts/apexcharts.min.js")}}"></script>
 
         <!-- Widgets Init Js -->
         
-        <script src="{{asset("js/pages/crm-dashboard.init.js")}}"></script>
+        <script src="{{asset("public/js/pages/crm-dashboard.init.js")}}"></script>
 
         <!-- App js-->
         
-        <script src="{{asset("js/app.js")}}"></script>
+        <script src="{{asset("public/js/app.js")}}"></script>
 
     </body>
 

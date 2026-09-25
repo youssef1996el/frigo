@@ -1,7 +1,7 @@
 @extends('Dashboard.index')
 
 @section('dashboard')
-<script src="{{asset("js/livreur/script.js")}}"></script>
+<script src="{{asset("public/js/livreur/script.js")}}"></script>
 <script>
     var csrf_token                      = "{{csrf_token()}}";
     var AddLiveurs                       = "{{url('Addlivreur')}}";
